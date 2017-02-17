@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- General -->
+    <string name="app_name">Spontaneous-Running</string>
+    <string name="app_name_subtitle">Die Lauf-App</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_test">TestActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Example action</string>
+    <string name="btn_startActivity">Starte Aktivität</string>
+    <string name="confirm">OK</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="cont">Weiter</string>
+    <string name="login_title">Login</string>
+    <string name="copyright">Copyright</string>
+    <string name="version">Version</string>
+	<string name="logo_description">App Logo</string>
+    
+    <!-- Menu -->
+	<string name="title_start">Start</string>
+	<string name="title_startMap">Start</string>
+	<string name="title_myActivities">Aktivitäten CardView</string>
+	<string name="title_myActivitiesList">Aktivitäten</string>
+	<string name="title_myActivitiesREST">Aktivitäten REST</string>
+	<string name="title_Logout">Logout</string>
+    <string name="label_your_full_name">Name</string>
+	
+    <!-- Activities -->
+    <string name="title_activity_login">Login</string>
+    <string name="title_activity_home">Home</string>
+
+    <!-- CuurentActivity Activity -->
+    <string name="unit_km">km</string>
+    <string name="title_speed">Geschwindigkeit</string>
+    <string name="title_speedPerHour">km/h</string>
+    
+    <!-- Actions -->
+    <string name="action_settings">Einstellungen</string>
+    <string name="action_search">Suche</string>
+    <string name="action_myActivities">Meine Aktivitäten</string>
+    <string name="action_myActivitiesREST">Meine REST Aktivitäten</string>
+    <string name="action_startActivity">Start</string>
+    <string name="action_startMapActivity">Start Map</string>
+    <string name="action_music">Musik</string>
+    <string name="action_logout">Abmelden</string>
+    
+    <!-- Prompts -->
+    <string name="chooseActivity_prompt">Art der Aktivität</string>
+
+    <!-- Hints -->
+    <string name="chooseActivity_hint">Art der Aktivität auswählen</string>
+
+    <!-- Errors -->
+    <string name="fatalErrorHdr">System-Fehler</string>
+    <string name="fatalErrorTxt">Sorry, das hätte nicht passieren dürfen. Es ist ein unbekannter Fehler aufgetreten. Bitte starten Sie die Anwendung erneut.</string>
+    <string name="standardErrorHdr">Fehler</string>
+    <string name="standardErrorTxt">Sorry, es ist ein Fehler aufgetreten. Bitte starten Sie die Anwendung erneut.</string>
+
+     <!-- Warnings -->
+    <string name="standardWarningHdr">Warnung</string>
+    <string name="warningNoGPSSignalTxt">Es besteht derzeit kein GPS-Signal. Wenn Sie mit der Aktivität fortfahren kann es zu Abweichungen in der Messung kommen. Wie möchten Sie fortfahren?</string>
+
+    <!-- Requests -->
+    <string name="deleteActivityRequest">Wollen Sie die ausgewählte Aktivität wirklich löschen?</string>
+
+    <!-- Tracking Service -->
+    <string name="service_gpsdisabled">GPS disabled</string>
+    <string name="service_datadisabled">Keine Datenverbindung</string>
+    <string name="service_dataenabled">Datenverbindung hergestellt</string>
+    <string name="service_gpsproblem">Es ist ein Problem bei der GPS Verbindung aufgetreten</string>
+    <string name="service_networkstatus">Status Netzwerk</string>
+    <string name="service_gpsstatus">Status GPS</string>
+    <string name="service_gpsnostatus">Kein GPS Status</string>
+    <string name="service_start">Aktivität wird gestartet</string>
+    <string name="voiceover_speaking">Herzlichen Glückwunsch.</string>
+
+    <string name="remote_service_started">Aktivität gestartet</string>
+    <string name="remote_service_stopped">Aktivität gestoppt</string>
+    <string name="remote_service_label">Aktivität gestartet</string>
+    <string name="remote_service_connected">Remote Service verbunden</string>
+    <string name="remote_service_disconnected">Remote Service nicht verbunden</string>
+    <string name="remote_service_unbind_disconn">Remote Service Unbind</string>
+    <string name="remote_service_controller">Remote Service Cotroller</string>
+    <string name="start_service">Start Remote Service</string>
+    <string name="stop_service">Stop Remote Service</string>
+    <string name="remote_service_binding">Remote Service Binding</string>
+    <string name="bind_service">Bind Service</string>
+    <string name="unbind_service">Unbind Service</string>
+    <string name="kill_process">Kill Process</string>
+    <string name="remote_call_failed">Remote call failed</string>
+    <string name="title_activity_binding_options">BindingOptions</string>
+    <string name="title_activity_binding">Binding</string>
+	<string name="service_gpsenabled">GPS enabled</string>
+	<string name="service_connectiondisabled">Verbindung zum Remote Service deaktiviert</string>
+
+    <!-- Other -->
+    <string name="lineSeparatorDesc">Trennlinie</string>
+
+    <!-- Activities and fragments-->
+
+	<!-- Login Activity-->
+	<string name="loginEmail">E-Mail</string>
+	<string name="loginPwd">Passwort</string>
+	<string name="loginBtn">Anmelden</string>
+	<string name="loginRegister">Registrieren</string>
+	<string name="stayLoggedIn">Angemeldet bleiben</string>
+	<string name="progress_signing_in">Anmeldung...</string>
+    <string name="progress_user_info">Lade Nutzer-Daten...</string>
+    <string name="error_login_url">Endpoint-URL für login falsche oder leer.</string>
+    <string name="error_userinfo_url">Endpoint-URL für UserInfo falsch oder leer.</string>
+    <string name="error_incorrect_password">Passwort nicht korrekt</string>
+    <string name="error_auth_wrong_credentials_msg">Fehler bei der Anmeldung. Zugangsdaten nicht korrekt.</string>
+
+	<!-- Register Activity -->
+	<string name="register">Registrieren</string>
+	<string name="registerFirstname">Vorname</string>
+	<string name="registerFirstnameHint">Vorname</string>
+	<string name="registerLastname">Nachname</string>
+	<string name="registerLastnameHint">Nachname</string>
+	<string name="registerEmail">E-Mail</string>
+	<string name="registerEmailHint">E-Mail</string>
+	<string name="registerPwd">Passwort</string>
+	<string name="registerPwdHint">Passwort</string>
+    <string name="progress_register">Registriere Nutzer...</string>
+    <string name="error_register_empty_fields">Bitte alle Felder ausfüllen!</string>
+    <string name="error_register_invalid_email">Bitte geben Sie eine gültige E-Mail-Adresse ein!</string>
+				
+	<!-- Start Fragment -->
+	<string name="gpsSignalSearching">Suche...</string>
+	<string name="gpsSignalBad">Schlecht</string>
+	<string name="gpsSignalMedium">Mittel</string>
+	<string name="gpsSignalGood">Gut</string>
+	<string name="gpsSignal">GPS Signal</string>
+	<string name="contentDescGpsImg">GPS Signal Stärke</string>
+	
+    <!-- Current Activity -->
+    <string name="duration">Dauer</string>
+    <string name="btn_stop">Stop</string>
+    <string name="btn_resume">Weiter</string>
+    <string name="btn_pause">Pause</string>
+    <string name="chronometer_initial_format">Initial format:</string>
+
+    <!-- Activity Summary Activity -->
+    <string name="distance">Distanz</string>
+    <string name="calories">Kalorien</string>
+    <string name="caloriesUnit">kcal</string>
+    <string name="average">Schnitt</string>
+    <string name="delete_activity">Aktivität löschen</string>
+    <string name="btn_saveActivity">Aktivität speichern</string>
+    <string name="btn_splittimes">Zwischenzeiten</string>
+    <string name="error_save_track_url">Endpoint-URL für savetrack falsch oder leer.</string>
+    <string name="error_track_details_url">Endpoint-URL für gettrackdetails falsch oder leer.</string>
+    <string name="get_track_details">Lade Aktivität...</string>
+    <string name="delete_track">Lösche Aktivität...</string>
+
+    <!-- MyActivities -->
+    <string name="activity">Aktivität</string>
+    <string name="save_activities">Speicher Aktivitäten...</string>
+    <string name="save_activity">Speicher Aktivität...</string>
+    <string name="load_activities">Lade Aktivitäten...</string>
+
+    <!-- Colors -->
+    <color name="white">#FFFFFF</color>
+    <color name="grey">#DDDDDD</color>
+    <color name="darkgrey">#333333</color>
+    <color name="blue">#003366</color>
+    <color name="lightblue">#33B5E5</color>
+    <color name="green">#669900</color>
+    <color name="lightgreen">#99CC00</color>
+    <color name="red">#CC0000</color>
+    <color name="lightred">#FF0000</color>
+    <color name="orange">#FF8800</color>
+    <color name="lightorange">#FFBB33</color>
+    <color name="purple">#9933CC</color>
+    <color name="lightpurple">#AA66CC</color>
+    <color name="fontBlue">#ff3399ff</color>
+    <color name="black">#000000</color>
+    
+    <string name="title_activity_activity_summary">Aktivität</string>
+
+</resources>

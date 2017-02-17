@@ -1,0 +1,25 @@
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="org.spontaneous.activities.SplitTimesActivity"
+    android:id="@+id/layout_fragment_activity_summary"
+    android:orientation="vertical"
+    android:background="@android:color/white">
+
+	<include android:id="@+id/tool_bar_layout" layout="@layout/tool_bar" />
+	
+	<RelativeLayout
+    	android:layout_width="match_parent"
+    	android:layout_height="match_parent"
+    	tools:context="org.spontaneous.activities.SplitTimesActivity" >
+
+    <ListView
+  		android:id="@+id/splitTimesList"
+  		android:layout_width="match_parent"
+  		android:layout_height="wrap_content" >
+	</ListView> 
+
+	</RelativeLayout>
+</LinearLayout>

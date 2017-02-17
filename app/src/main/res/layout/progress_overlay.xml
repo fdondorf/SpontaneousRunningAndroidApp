@@ -1,0 +1,26 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/status_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/smoked_glass"
+    android:visibility="gone">
+
+    <ProgressBar
+        android:id="@+id/status_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
+
+    <TextView
+        android:id="@+id/status_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/status_progress"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="sans-serif-light"
+        android:gravity="center_horizontal"
+        android:text="@string/progress_signing_in"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+</RelativeLayout>
