@@ -185,7 +185,6 @@ public class ActivitySummaryActivity extends Activity implements OnMapReadyCallb
 	  	viewFlipper = (ViewFlipper) findViewById(R.id.viewflipperSummary);
 	  
 	  	// Initialize GUI-Components
-	  	//map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map));
 	  	MapFragment mapFragment = (MapFragment) getFragmentManager()
 			  .findFragmentById(R.id.map);
 	  	mapFragment.getMapAsync(this);

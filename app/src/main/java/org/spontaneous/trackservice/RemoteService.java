@@ -875,7 +875,7 @@ public class RemoteService extends Service implements LocationListener {
 
     ContentValues args = new ContentValues();
     args.put(TracksColumns.TOTAL_DISTANCE, this.mTotalDistance);
-    args.put(TracksColumns.TOTAL_DURATION, TrackingUtil.computeTotalDuration(trackModel));
+    args.put(TracksColumns.TOTAL_DURATION, TrackingUtil.computeTotalDuration(trackModel).getTotalDuration());
 
     Uri trackUpdateUri = Uri.withAppendedPath(Tracks.CONTENT_URI, String.valueOf(this.mTrackId));
     getContentResolver().update(trackUpdateUri, args, null, null);

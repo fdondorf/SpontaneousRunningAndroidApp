@@ -1,19 +1,12 @@
 package org.spontaneous.core;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.TreeMap;
-
-import org.spontaneous.R;
-import org.spontaneous.activities.model.GeoPoint;
-import org.spontaneous.activities.model.GeoPointModel;
-import org.spontaneous.activities.model.SegmentModel;
-import org.spontaneous.activities.model.SplitTimeModel;
-import org.spontaneous.activities.model.TrackModel;
-import org.spontaneous.utility.Constants;
+import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,13 +15,21 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
+import org.spontaneous.R;
+import org.spontaneous.activities.model.GeoPoint;
+import org.spontaneous.activities.model.GeoPointModel;
+import org.spontaneous.activities.model.SegmentModel;
+import org.spontaneous.activities.model.SplitTimeModel;
+import org.spontaneous.activities.model.TimeModel;
+import org.spontaneous.activities.model.TrackModel;
+import org.spontaneous.utility.Constants;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 
 
 public class TrackingUtil {
@@ -131,7 +132,7 @@ public class TrackingUtil {
 						  timeLastUnit += point.getTime() - segment.getStartTimeInMillis();
 						  firstPointOfSegment = false;
 					  }
-					  // ...ansonsten Zeit aktueller Punkt - letzter Punkt
+					  // ...ansonsten Zeit aktueller Punkt - vorheriger Punkt
 					  else {
 						  if (lastPoint == null) {
 							  lastPoint = point;
@@ -156,33 +157,32 @@ public class TrackingUtil {
 		
 		  // Last Unit
 		  long distance = Math.round(totalDistanceCurrentPoint);
-		  long done = Math.round(kmDone);
-		  long result1 = done - distance;
-		  long result2 = 0l;
-		  if (result1 > 0l) 
-		  	result2 = 1000/result1;
-		  
-		  Long timeFinalUnit = timeLastUnit * result2; //(1000/(done - distance));
-		  result.add(new SplitTimeModel(unitCounter, timeFinalUnit));
-
+		  long done = Math.round(kmDone - unitMarker);
+		  long distanceLastSegment = distance - done;
+		  if (distanceLastSegment > 0l) {
+			  Long timeLastUnitMultiUnitMarker = Long.valueOf(Math.round(timeLastUnit * unitMarker));
+			  Long timeFinalUnit = timeLastUnitMultiUnitMarker / distanceLastSegment;
+			  result.add(new SplitTimeModel(unitCounter, timeFinalUnit));
+		  }
 		  return result;
 	}
-	
-	public static Long computeTotalDuration(TrackModel trackModel) {
-		
-		Long totalDuration = 0L;
-		
-		if (trackModel.getClass() != null)
-			totalDuration = System.currentTimeMillis() - Long.valueOf(trackModel.getCreationDate());
-		
-		Long segmentDuration = null;
-		for (SegmentModel segModel : trackModel.getSegments()) {
-			segmentDuration = segModel.getEndTimeInMillis() - segModel.getStartTimeInMillis();
-			totalDuration += segmentDuration;
+
+	public static TimeModel computeTotalDuration(TrackModel trackModel) {
+
+		TimeModel timeModel = new TimeModel();
+
+		// Compute duration
+		Long totalDurationInMillis = 0L;
+		Long timeCurrentSegement = null;
+
+		for (SegmentModel segmentModel : trackModel.getSegments()) {
+			timeCurrentSegement = segmentModel.getEndTimeInMillis() - segmentModel.getStartTimeInMillis();
+			totalDurationInMillis += timeCurrentSegement;
 		}
-		
-		return totalDuration;
-	};
+
+		timeModel.setTotalDuration(totalDurationInMillis);
+		return timeModel;
+	}
 	  
 	private static Map<Long, List<GeoPointModel>> createDataStructure(List<GeoPointModel> geoPoints) {
 

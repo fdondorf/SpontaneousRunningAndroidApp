@@ -52,8 +52,6 @@ public class CustomArrayAdapter extends ArrayAdapter<TrackModel> {
 	  private String getSecondLineLeftText(int position) {
 		  StringBuilder builder = new StringBuilder();
 		  builder.append(DateUtil.printDate(values.get(position).getCreationDate()));
-		  //builder.append(" - ");
-		  //builder.append(values.get(position).getUserId());
 		  return builder.toString();
 	  }
 }
