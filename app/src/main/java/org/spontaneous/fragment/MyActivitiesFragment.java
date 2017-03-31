@@ -40,6 +40,7 @@ import org.spontaneous.db.GPSTracking.TracksColumns;
 import org.spontaneous.trackservice.util.TrackingServiceConstants;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MyActivitiesFragment extends ListFragment implements WebServiceHandler {
@@ -148,6 +149,7 @@ public class MyActivitiesFragment extends ListFragment implements WebServiceHand
 			}
 		}
 
+		Collections.sort(tracks);
 		return tracks;
 	}
 

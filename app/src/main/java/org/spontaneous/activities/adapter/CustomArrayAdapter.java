@@ -42,7 +42,6 @@ public class CustomArrayAdapter extends ArrayAdapter<TrackModel> {
 		  Integer userId = values.get(position).getUserId();
 		  firstLineLeft.setText("Aktivität " + pos);
 		  firstLineRight.setText(StringUtil.getDistanceString(values.get(position).getTotalDistance()));
-		  //secondLine.setText(DateUtil.millisToShortDHMS(values.get(position).getTotalDuration()));
 		  secondLine.setText(getSecondLineLeftText(position));
 		  secondLineRight.setText(DateUtil.millisToShortDHMS(values.get(position).getTotalDuration()));
 	      imageView.setImageResource(R.drawable.ic_activity_dark);

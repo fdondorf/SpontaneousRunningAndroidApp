@@ -11,7 +11,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -54,8 +53,6 @@ public class LoginActivityOld extends Activity {
     
     private SharedPreferences sharedPrefs;
     
-    private ToggleButton toggleBtn;
-    
     private Context mContext;
     private PersistentCookieStore myCookieStore;
     
@@ -77,8 +74,6 @@ public class LoginActivityOld extends Activity {
         pwdET = (EditText)findViewById(R.id.loginPassword);
     
         stayLoggedIn = (CheckBox) findViewById(R.id.cb_stayLoggedIn);
-        
-        toggleBtn = (ToggleButton) findViewById(R.id.server_login_enabled);
         
         // Instantiate Progress Dialog object
         prgDialog = new ProgressDialog(this);
@@ -147,42 +142,35 @@ public class LoginActivityOld extends Activity {
      * @throws UnsupportedEncodingException 
      */
     public void loginUser(View view) throws UnsupportedEncodingException, JSONException {
-    	
-    	if (!toggleBtn.isChecked()) {
-    	
-	        // Get Email Edit View Value
-	        String email = emailET.getText().toString();
-	        // Get Password Edit View Value
-	        String password = pwdET.getText().toString();
-	        
-	        boolean stay = stayLoggedIn.isChecked();
-	        
-	        // Instantiate Http Request Param Object
-	        RequestParams params = new RequestParams();
-	        // When Email Edit View and Password Edit View have values other than Null
-	        if (Utility.isNotNull(email) && Utility.isNotNull(password)){
-	            // When Email entered is Valid
-	            if (Utility.validate(email)){
-	                // Put Http parameter username with value of Email Edit View control
-	                params.put("j_username", email);
-	                // Put Http parameter password with value of Password Edit Value control
-	                params.put("j_password", password);
-	                // Invoke RESTful Web Service with Http parameters
-	                //login(params);
-	                login(email, password, stay);
-	            }
-	            // When Email is invalid
-	            //else{
-	            //    Toast.makeText(getApplicationContext(), "Please enter valid email", Toast.LENGTH_LONG).show();
-	            //}
-	        } else{
-	            Toast.makeText(getApplicationContext(), "Please fill the form, don't leave any field blank", Toast.LENGTH_LONG).show();
-	        }
-    	}
-    	else {
-    		navigatetoHomeActivity();
-    	}
- 
+
+        // Get Email Edit View Value
+        String email = emailET.getText().toString();
+        // Get Password Edit View Value
+        String password = pwdET.getText().toString();
+
+        boolean stay = stayLoggedIn.isChecked();
+
+        // Instantiate Http Request Param Object
+        RequestParams params = new RequestParams();
+        // When Email Edit View and Password Edit View have values other than Null
+        if (Utility.isNotNull(email) && Utility.isNotNull(password)){
+            // When Email entered is Valid
+            if (Utility.validate(email)){
+                // Put Http parameter username with value of Email Edit View control
+                params.put("j_username", email);
+                // Put Http parameter password with value of Password Edit Value control
+                params.put("j_password", password);
+                // Invoke RESTful Web Service with Http parameters
+                //login(params);
+                login(email, password, stay);
+            }
+            // When Email is invalid
+            //else{
+            //    Toast.makeText(getApplicationContext(), "Please enter valid email", Toast.LENGTH_LONG).show();
+            //}
+        } else{
+            Toast.makeText(getApplicationContext(), "Please fill the form, don't leave any field blank", Toast.LENGTH_LONG).show();
+        }
     }
  
     private void login (String email,  String password, boolean stayLogged) {

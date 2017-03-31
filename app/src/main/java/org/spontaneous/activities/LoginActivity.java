@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import org.spontaneous.R;
 import org.spontaneous.activities.util.DialogHelper;
@@ -58,8 +57,6 @@ public class LoginActivity extends Activity implements WebServiceHandler {
 
     private SharedPreferences sharedPrefs;
 
-    private ToggleButton toggleBtn;
-
     private ProgressDialog prgDialog;
 
     private Context mContext;
@@ -83,8 +80,6 @@ public class LoginActivity extends Activity implements WebServiceHandler {
         pwdET = (EditText)findViewById(R.id.loginPassword);
 
         stayLoggedIn = (CheckBox) findViewById(R.id.cb_stayLoggedIn);
-
-        toggleBtn = (ToggleButton) findViewById(R.id.server_login_enabled);
 
         // Instantiate Progress Dialog object
         prgDialog = new ProgressDialog(this);
@@ -197,63 +192,56 @@ public class LoginActivity extends Activity implements WebServiceHandler {
     public void attemptLogin()
     {
 
-        if (!toggleBtn.isChecked()) {
+        // Reset errors.
+        emailET.setError(null);
+        pwdET.setError(null);
 
-            // Reset errors.
-            emailET.setError(null);
-            pwdET.setError(null);
+        // Store values at the time of the login attempt.
+        String mUserId = emailET.getText().toString();
+        String mPassword = pwdET.getText().toString();
 
-            // Store values at the time of the login attempt.
-            String mUserId = emailET.getText().toString();
-            String mPassword = pwdET.getText().toString();
+        // smoke test - if all credentials are filled
+        if ((mUserId.length() == 0) || (mPassword.length() == 0)) {
 
-            // smoke test - if all credentials are filled
-            if ((mUserId.length() == 0) || (mPassword.length() == 0)) {
+            showCredentialsError();
 
-                showCredentialsError();
+        } else {
+
+            this.setResult(CallResult.OK);
+            requestTimeout.startCountingFrom(Constants.COMMON_REQUEST_TIMEOUT);
+
+            if (loginCallHandler.isTaskInProgress()) {
+                return;
+            }
+
+            final String enpointUrl = "http://localhost:8080" +
+                    RestUrls.REST_SERVICE_LOGIN.toString(); //ConfigProvider.INSTANCE.getConfig("login_endpoint");
+
+            if (enpointUrl == null) {
+
+                //GuiHelper.showFatalConfigError(this, "Login");
+                errorMsg.setText(getString(R.string.error_login_url));
 
             } else {
 
-                this.setResult(CallResult.OK);
-                requestTimeout.startCountingFrom(Constants.COMMON_REQUEST_TIMEOUT);
+                try {
 
-                if (loginCallHandler.isTaskInProgress()) {
-                    return;
+                    loginWS = new LoginWebService();
+                    loginWS.setParam("login", mUserId);
+                    loginWS.setParam("password", mPassword);
+
+                    loginWS.doRequest(loginCallHandler);
+
+                } catch (SystemException e) {
+
+                    prgDialog.cancel();
+                    errorMsg.setText(e.getMessage());
+                    //GuiHelper.showFatalError(this);
+                    Log.e(TAG, "Cannot build proper request", e);
                 }
-
-                final String enpointUrl = "http://localhost:8080" +
-                        RestUrls.REST_SERVICE_LOGIN.toString(); //ConfigProvider.INSTANCE.getConfig("login_endpoint");
-
-                if (enpointUrl == null) {
-
-                    //GuiHelper.showFatalConfigError(this, "Login");
-                    errorMsg.setText(getString(R.string.error_login_url));
-
-                } else {
-
-                    try {
-
-                        loginWS = new LoginWebService();
-                        loginWS.setParam("login", mUserId);
-                        loginWS.setParam("password", mPassword);
-
-                        loginWS.doRequest(loginCallHandler);
-
-                    } catch (SystemException e) {
-
-                        prgDialog.cancel();
-                        errorMsg.setText(e.getMessage());
-                        //GuiHelper.showFatalError(this);
-                        Log.e(TAG, "Cannot build proper request", e);
-                    }
-                }
-
             }
-        }
-        else {
-            navigateToHomeActivity();
-        }
 
+        }
     }
 
     public void attemptGetUserInfo()

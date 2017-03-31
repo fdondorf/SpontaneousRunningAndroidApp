@@ -97,12 +97,6 @@
 			  android:onClick="onConfigSetClick"
 			  android:visibility="gone" />
 
-	        <ToggleButton
-	            android:id="@+id/server_login_enabled"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:text="Skip Login" />
-
     	</org.spontaneous.activities.view.DisablableLinearLayout>
 	</ScrollView>
 

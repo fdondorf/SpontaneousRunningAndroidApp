@@ -5,9 +5,7 @@ import android.app.ListFragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.provider.BaseColumns;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +14,6 @@ import android.widget.ListView;
 
 import org.spontaneous.R;
 import org.spontaneous.activities.ActivitySummaryActivity;
-import org.spontaneous.activities.MainActivity;
 import org.spontaneous.activities.adapter.CustomArrayAdapter;
 import org.spontaneous.activities.model.TrackModel;
 import org.spontaneous.activities.util.DialogHelper;
@@ -34,10 +31,9 @@ import org.spontaneous.core.common.error.SystemError;
 import org.spontaneous.core.impl.GetTracksWebService;
 import org.spontaneous.core.impl.SaveTrackWebService;
 import org.spontaneous.core.impl.TrackingServiceImpl;
-import org.spontaneous.db.GPSTracking;
 import org.spontaneous.trackservice.util.TrackingServiceConstants;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MyActivitiesRESTFragment extends ListFragment implements WebServiceHandler {
@@ -63,7 +59,6 @@ public class MyActivitiesRESTFragment extends ListFragment implements WebService
 	private static final String ARG_SECTION_NUMBER = "section_number";
 
 	private List<TrackModel> mTracks = null;
-	private List<TrackModel> mTracksLocal = null;
 
 	public static MyActivitiesRESTFragment newInstance(int sectionNumber, Activity parent) {
 
@@ -91,8 +86,6 @@ public class MyActivitiesRESTFragment extends ListFragment implements WebService
 		prgDialog.setMessage("Please wait...");
 		prgDialog.setCancelable(false);
 
-		getMyActivitiesList();
-
 		attemptGetActivities();
 
 		return rootView;
@@ -119,60 +112,6 @@ public class MyActivitiesRESTFragment extends ListFragment implements WebService
 				Log.e(TAG, "Cannot build proper request", e);
 			}
 		}
-	}
-
-	private void getMyActivitiesList() {
-
-		// Defines a list of columns to retrieve from the Cursor and load into an output row
-		String[] mTrackListColumns = {
-				BaseColumns._ID,
-				GPSTracking.TracksColumns.NAME,
-				GPSTracking.TracksColumns.TOTAL_DISTANCE,
-				GPSTracking.TracksColumns.TOTAL_DURATION,
-				GPSTracking.TracksColumns.CREATION_TIME,
-				GPSTracking.TracksColumns.USER_ID
-		};
-
-		String [] selectionArgs = { String.valueOf(((MainActivity)getActivity()).getUserId()) };
-		Cursor mTracksCursor = getActivity().getContentResolver().query(GPSTracking.Tracks.CONTENT_URI, mTrackListColumns, null, selectionArgs, GPSTracking.TracksColumns.CREATION_TIME + " DESC");
-
-		//mTracks = trackingService.getAllTracks();
-		mTracksLocal = getTrackData(mTracksCursor);
-		CustomArrayAdapter adapter = new CustomArrayAdapter(getActivity(), mTracksLocal);
-		setListAdapter(adapter);
-	}
-
-	private List<TrackModel> getTrackData(Cursor mTracksCursor) {
-
-		List<TrackModel> tracks = new ArrayList<TrackModel>();
-		if (mTracksCursor != null) {
-			TrackModel trackModel = null;
-			while (mTracksCursor.moveToNext()) {
-
-				// TODO: Quickfix wieder entfernen
-				Long totalDuration = 0L;
-				String value = null;
-				if (mTracksCursor.getString(mTracksCursor.getColumnIndex(GPSTracking.Tracks.TOTAL_DURATION)) != null) {
-					try {
-						totalDuration = Long.valueOf(mTracksCursor.getString(mTracksCursor.getColumnIndex(GPSTracking.Tracks.TOTAL_DURATION)));
-						Log.i(TAG, value);
-					} catch (Exception exc) {
-						value = String.valueOf(mTracksCursor.getString(mTracksCursor.getColumnIndex(GPSTracking.Tracks.TOTAL_DURATION)));
-					}
-				}
-
-				trackModel = new TrackModel(
-						mTracksCursor.getLong(mTracksCursor.getColumnIndex(GPSTracking.Tracks._ID)),
-						mTracksCursor.getString(mTracksCursor.getColumnIndex(GPSTracking.Tracks.NAME)),
-						Float.valueOf(mTracksCursor.getString(mTracksCursor.getColumnIndex(GPSTracking.Tracks.TOTAL_DISTANCE))),
-						Long.valueOf(mTracksCursor.getString(mTracksCursor.getColumnIndex(GPSTracking.Tracks.TOTAL_DURATION))),
-						Long.valueOf(mTracksCursor.getString(mTracksCursor.getColumnIndex(GPSTracking.Tracks.CREATION_TIME))),
-						Integer.valueOf(mTracksCursor.getInt(mTracksCursor.getColumnIndex(GPSTracking.Tracks.USER_ID))));
-				tracks.add(trackModel);
-			}
-		}
-
-		return tracks;
 	}
 
 	@Override
@@ -213,6 +152,7 @@ public class MyActivitiesRESTFragment extends ListFragment implements WebService
 	{
 		webService.interpretResponse(response);
 		mTracks = ((GetTracksWebService)webService).getTracksFromResponse(response);
+		Collections.sort(mTracks, Collections.<TrackModel>reverseOrder());
 		CustomArrayAdapter adapter = new CustomArrayAdapter(getActivity(), mTracks);
 		setListAdapter(adapter);
 	}
@@ -297,7 +237,6 @@ public class MyActivitiesRESTFragment extends ListFragment implements WebService
 		public void onTimedOut()
 		{
 			prgDialog.cancel();
-			//progressOverlay.showProgress(false);
 			onError(new WebServiceResponse.Builder().fail(SystemError.TIMEOUT).build());
 			cancelHandlers();
 		}

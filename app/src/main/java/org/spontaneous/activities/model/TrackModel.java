@@ -14,7 +14,7 @@ import java.util.List;
  * @author fdondorf
  *
  */
-public class TrackModel {
+public class TrackModel implements Comparable<TrackModel> {
 
 	private Long id;
 	private String name;
@@ -121,5 +121,12 @@ public class TrackModel {
 		Gson gson = new Gson();
 		TrackModel trackModel = gson.fromJson(to.toString(), TrackModel.class);
 		return trackModel;
+	}
+
+	@Override
+	public int compareTo(TrackModel track) {
+		if (this.creationTime == null || track.getCreationDate() == null)
+			return 0;
+		return this.creationTime.compareTo(track.getCreationDate());
 	}
 }
