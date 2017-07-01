@@ -5,9 +5,12 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.view.GravityCompat;
@@ -33,6 +36,7 @@ import org.spontaneous.activities.util.NavItem;
 import org.spontaneous.activities.util.TimeoutHandler;
 import org.spontaneous.core.RestUrls;
 import org.spontaneous.core.common.Common;
+import org.spontaneous.core.common.CommonService;
 import org.spontaneous.core.common.SystemException;
 import org.spontaneous.core.common.WebServiceCallHandler;
 import org.spontaneous.core.common.WebServiceResponse;
@@ -43,20 +47,26 @@ import org.spontaneous.core.impl.LogoutWebService;
 import org.spontaneous.fragment.LogoutFragment;
 import org.spontaneous.fragment.MyActivitiesFragment;
 import org.spontaneous.fragment.MyActivitiesRESTFragment;
-import org.spontaneous.fragment.NavigationDrawerFragment;
+import org.spontaneous.fragment.MyProfileFragment;
+import org.spontaneous.fragment.SettingsFragment;
 import org.spontaneous.fragment.StartFragmentMap;
 import org.spontaneous.utility.Constants;
 
 import java.util.ArrayList;
 
-public class MainActivity extends Activity implements
-		NavigationDrawerFragment.NavigationDrawerCallbacks {
+import de.hdodenhof.circleimageview.CircleImageView;
+
+public class MainActivity extends Activity implements SettingsFragment.Callback {
+		//NavigationDrawerFragment.NavigationDrawerCallbacks {
 
 	private static String TAG = MainActivity.class.toString();
+
+	private static final String TAG_NESTED = "TAG_NESTED";
 
 	private static final int ITEM_ID_START = 1;
 	private static final int ITEM_ID_ACTIVITIES_LOCAL = 2;
 	private static final int ITEM_ID_ACTIVITIES = 3;
+	private static final int ITEM_ID_PREFERENCES = 5;
 	private static final int ITEM_ID_LOGOUT = 4;
 
 	private LogoutWebService logoutWS;
@@ -102,21 +112,31 @@ public class MainActivity extends Activity implements
 		if (mUsername != null) {
 			String firstname = "Maria";
 			if (UserInfo.INSTANCE.getUserInfo() != null) {
-				firstname = UserInfo.INSTANCE.getUserInfo().getFirstName();//sharedPrefs.getString(Constants.PREF_FIRSTNAME, "unknown");
+				firstname = UserInfo.INSTANCE.getUserInfo().getFirstName();
 			}
 			mUsername.setText("Hallo " + firstname + "!");
 		}
 
 	    mNavItems.add(new NavItem(ITEM_ID_START, getResources().getString(R.string.title_startMap),
-	    		"Starte eine Aktivität", R.drawable.ic_activity, true));
+	    		getResources().getString(R.string.subtitle_startMap), R.drawable.ic_activity, true));
 		if (Authentication.INSTANCE.isAdmin()) {
-			mNavItems.add(new NavItem(ITEM_ID_ACTIVITIES_LOCAL, getResources().getString(R.string.title_myActivitiesList),
-					"Lokale Aktivitäten", R.drawable.ic_list, Authentication.INSTANCE.isAdmin()));
+			mNavItems.add(new NavItem(ITEM_ID_ACTIVITIES_LOCAL,
+					getResources().getString(R.string.title_myActivitiesList),
+					getResources().getString(R.string.subtitle_myActivities),
+					R.drawable.ic_list, Authentication.INSTANCE.isAdmin()));
 		}
-		mNavItems.add(new NavItem(ITEM_ID_ACTIVITIES, getResources().getString(R.string.title_myActivitiesList),
-				"Das habe ich erreicht", R.drawable.ic_list, true));
-	    mNavItems.add(new NavItem(ITEM_ID_LOGOUT, getResources().getString(R.string.title_Logout),
-	    		"Ich will hier raus", R.drawable.ic_logout, true));
+		mNavItems.add(new NavItem(ITEM_ID_ACTIVITIES,
+				getResources().getString(R.string.title_myActivitiesList),
+				getResources().getString(R.string.subtitle_myActivities),
+				R.drawable.ic_list, true));
+		mNavItems.add(new NavItem(ITEM_ID_PREFERENCES,
+				getResources().getString(R.string.title_preferences),
+				getResources().getString(R.string.subtitle_preferences),
+				R.drawable.ic_action_settings, true));
+	    mNavItems.add(new NavItem(ITEM_ID_LOGOUT,
+				getResources().getString(R.string.title_Logout),
+	    		getResources().getString(R.string.subtitle_Logout),
+				R.drawable.ic_logout, true));
 
 		// Instantiate Progress Dialog object
 		prgDialog = new ProgressDialog(this);
@@ -198,6 +218,14 @@ public class MainActivity extends Activity implements
         
         selectItemFromDrawer(0);
 	}
+
+	private BroadcastReceiver receiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context ctx, Intent i) {
+			CircleImageView view = (CircleImageView) findViewById(R.id.avatar);
+			view.setImageURI(Uri.parse(UserInfo.INSTANCE.getUserInfo().getProfileImage()));
+		}
+	};
 
 	private void registerExceptionHandler() {
 		if(!(Thread.getDefaultUncaughtExceptionHandler() instanceof CustomExceptionHandler)) {
@@ -294,6 +322,27 @@ public class MainActivity extends Activity implements
 
 	};
 
+	public void onResume() {
+		super.onResume();
+
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(CommonService.BroadcastEndpoint.SERVICE);
+
+		this.registerReceiver(this.receiver, filter);
+
+
+		if (UserInfo.INSTANCE.getUserInfo().getProfileImage() != null) {
+			CircleImageView view = (CircleImageView) findViewById(R.id.avatar);
+			view.setImageURI(Uri.parse(UserInfo.INSTANCE.getUserInfo().getProfileImage()));
+		}
+	}
+
+	public void onPause() {
+		super.onPause();
+
+		this.unregisterReceiver(this.receiver);
+	}
+
 	private void onCanceled()
 	{
 		Log.i(TAG, "onCanceled()");
@@ -353,6 +402,13 @@ public class MainActivity extends Activity implements
 								MyActivitiesRESTFragment.newInstance(position, this)).commit();
 				break;
 
+			case ITEM_ID_PREFERENCES:
+				fragmentManager
+						.beginTransaction()
+						.replace(R.id.mainContent,
+								SettingsFragment.newInstance(position, this)).commit();
+				break;
+
 			case ITEM_ID_LOGOUT:
 				fragmentManager
 						.beginTransaction()
@@ -368,6 +424,7 @@ public class MainActivity extends Activity implements
 	    mDrawerLayout.closeDrawer(mDrawerPane);
 	}
 
+	/*
 	@Override
 	public void onNavigationDrawerItemSelected(int position) {
 		// update the main content by replacing fragments
@@ -396,6 +453,13 @@ public class MainActivity extends Activity implements
 								MyActivitiesRESTFragment.newInstance(position, this)).commit();
 				break;
 
+			case ITEM_ID_PREFERENCES:
+				fragmentManager
+						.beginTransaction()
+						.replace(R.id.mainContent,
+								SettingsFragment.newInstance(position, this)).commit();
+				break;
+
 			case ITEM_ID_LOGOUT:
 				fragmentManager
 						.beginTransaction()
@@ -404,6 +468,7 @@ public class MainActivity extends Activity implements
 				break;
 		};
 	}
+	*/
 
 	public void onSectionAttached(int number) {
 		switch (number) {
@@ -511,5 +576,9 @@ public class MainActivity extends Activity implements
 		Long userId = userDAO.getUserId();
 		return userId;
 	}
-	
+
+	@Override
+	public void onNestedPreferenceSelected(int key) {
+		getFragmentManager().beginTransaction().replace(R.id.mainContent, MyProfileFragment.newInstance(key), TAG_NESTED).addToBackStack(TAG_NESTED).commit();
+	}
 }

@@ -4,7 +4,7 @@ import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.spontaneous.activities.model.TrackModel;
+import org.spontaneous.activities.model.UserModel;
 import org.spontaneous.core.RestUrls;
 import org.spontaneous.core.common.GenericSyncWebservice;
 import org.spontaneous.core.common.WebServiceCallHandler;
@@ -15,31 +15,31 @@ import org.spontaneous.core.crossdomain.UserInfo;
 
 import java.util.concurrent.TimeoutException;
 
-public class SaveTrackWebService extends GenericSyncWebservice {
+public class ChangeProfileWebService extends GenericSyncWebservice {
 
-    private final TrackModel trackModel;
+    private final UserModel userModel;
 
     /**
      * Initializes the web service object with the timeout value
      *
      * @param timeout the timeout value
      */
-    public SaveTrackWebService(int timeout, TrackModel trackModel)
+    public ChangeProfileWebService(int timeout, UserModel userModel)
     {
         super(timeout);
-        this.trackModel = trackModel;
+        this.userModel = userModel;
     }
 
     public WebServiceResponse doSynchronousRequest(WebServiceCallHandler requestResult) throws TimeoutException
     {
-        WebServiceRequestConfig req = buildCreateTrackRequest();
+        WebServiceRequestConfig req = buildUpdateUserRequest();
         return configureAndExecuteSynchRequest(requestResult, req);
     }
 
-    private WebServiceRequestConfig buildCreateTrackRequest()
+    private WebServiceRequestConfig buildUpdateUserRequest()
     {
         final String enpointUrl = RestUrls.SERVER_NAME + ":" + RestUrls.PORT +
-                RestUrls.REST_SERVICE_TRACK_UPDATE_ALL.toString();
+                RestUrls.REST_SERVICE_UPDATE_USER.toString();
 
         WebServiceRequestConfig req = new WebServiceRequestConfig(WebServiceRequestConfig.Method.POST, enpointUrl);
         req.addToken(Authentication.INSTANCE.getToken());
@@ -51,15 +51,20 @@ public class SaveTrackWebService extends GenericSyncWebservice {
     }
 
     /**
-     * Creates the JSON structure representing the track data
+     * Creates the JSON structure representing the user data
      *
-     * @return The {@link JSONObject} representing the track data
+     * @return The {@link JSONObject} representing the user data
      */
     public JSONObject createPostPayloadJson()
     {
         try {
-            trackModel.setUserId(Integer.valueOf(String.valueOf(UserInfo.INSTANCE.getUserInfo().getUserId())));
-            return trackModel.storeInJSON();
+            userModel.setId(Long.valueOf(String.valueOf(UserInfo.INSTANCE.getUserInfo().getUserId())));
+            userModel.setFirstname(UserInfo.INSTANCE.getUserInfo().getFirstName());
+            userModel.setLastname(UserInfo.INSTANCE.getUserInfo().getLastName());
+            userModel.setEmail(UserInfo.INSTANCE.getUserInfo().getEmail());
+            userModel.setGender(UserInfo.INSTANCE.getUserInfo().getGender());
+            userModel.setProfileImage(UserInfo.INSTANCE.getUserInfo().getProfileImage());
+            return userModel.storeInJSON();
         } catch (JSONException e) {
             Log.e(TAG, "Cannot build JSON-Object 'parcels'", e);
         }
@@ -70,7 +75,7 @@ public class SaveTrackWebService extends GenericSyncWebservice {
     public void interpretResponse(WebServiceResponse response)
     {
         if (response.getStatus() == WebServiceResponse.Status.OK) {
-            Log.i(TAG, "Saving track successful");
+            Log.i(TAG, "Changed profile successfully");
         }
     }
 

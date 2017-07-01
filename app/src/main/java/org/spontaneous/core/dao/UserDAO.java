@@ -19,8 +19,10 @@ public class UserDAO implements SerializableJSON<UserDAO> {
     private String email = "";
     private String firstName = "";
     private String lastName = "";
+    private String gender = "";
     private boolean stayLogged = false;
     private List<String> authorities = null;
+    private String profileImage;
 
     private static final String TAG = UserDAO.class.getSimpleName();
 
@@ -33,8 +35,10 @@ public class UserDAO implements SerializableJSON<UserDAO> {
         JSONHelper.setStringIfNotEmpty(to, "email", email);
         JSONHelper.setStringIfNotEmpty(to, "firstName", firstName);
         JSONHelper.setStringIfNotEmpty(to, "lastName", lastName);
+        JSONHelper.setStringIfNotEmpty(to, "gender", gender);
         JSONHelper.setBooleanIfNotEmpty(to, "stayLogged", stayLogged);
         JSONHelper.setStringArrayIfNotEmpty(to, "roles", authorities);
+        JSONHelper.setStringIfNotEmpty(to, "profileImage", profileImage);
 
         return to;
     }
@@ -46,8 +50,10 @@ public class UserDAO implements SerializableJSON<UserDAO> {
         email = JSONHelper.getStringFailsafe(to, "email", "");
         firstName = JSONHelper.getStringFailsafe(to, "firstName", "");
         lastName = JSONHelper.getStringFailsafe(to, "lastName", "");
+        gender = JSONHelper.getStringFailsafe(to, "gender", "");
         stayLogged = JSONHelper.getBooleanFailsafe(to, "stayLogged", false);
         authorities = JSONHelper.getStringArrayFailsafe(to, "roles", null);
+        profileImage = JSONHelper.getStringFailsafe(to, "profileImage", null);
         return this;
     }
 
@@ -85,6 +91,26 @@ public class UserDAO implements SerializableJSON<UserDAO> {
         this.lastName = lastName;
     }
 
+    public String getGender()
+    {
+        return gender;
+    }
+
+    public void setGender(String gender)
+    {
+        this.gender = gender;
+    }
+
+    public String getProfileImage()
+    {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage)
+    {
+        this.profileImage = profileImage;
+    }
+
     public boolean isStayLogged() {return stayLogged;}
 
     public void setStayLogged(boolean stayLogged) {this.stayLogged = stayLogged;}
@@ -92,5 +118,6 @@ public class UserDAO implements SerializableJSON<UserDAO> {
     public List<String> getAuthorities() { return authorities; };
 
     public void setAuthorities(List<String> authorities) { this.authorities = authorities; };
+
 
 }

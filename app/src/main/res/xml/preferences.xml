@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/pref_cat_key_profile">
+        <Preference
+            android:key="pref_key_profile"
+            android:summary="@string/pref_summary_profile"
+            android:title="@string/pref_title_profile"
+            android:persistent="false"/>
+
+        <Preference
+            android:key="pref_key_prefs_running"
+            android:summary="@string/pref_summary_prefs_running"
+            android:title="@string/pref_title_prefs_running"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_cat_key_profile">
+        <PreferenceScreen
+            android:key="renameCourses"
+            android:title="@string/pref_title_profile"
+            android:summary="@string/pref_summary_profile">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetPackage="org.spontaneous"
+                android:targetClass="org.spontaneous.activities.ChangeProfileActivity" />
+        </PreferenceScreen>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_cat_key_other_settings">
+        <ListPreference
+            android:key="pref_key_language"
+            android:summary="@string/pref_summary_language"
+            android:title="@string/pref_title_language"
+            android:entries="@array/entries_languages"
+            android:entryValues="@array/entryvalues_languages"
+            android:dialogTitle="@string/dialog_title_language_select"/>
+
+        <Preference
+            android:key="pref_key_version"
+            android:summary="@string/pref_title_version"
+            android:title="@string/pref_title_version" />
+    </PreferenceCategory>
+</PreferenceScreen>

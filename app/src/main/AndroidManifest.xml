@@ -75,6 +75,16 @@
             android:name=".activities.HomeActivity"
             android:label="@string/title_activity_home">
         </activity>
+        <activity
+            android:name=".activities.ChangeProfileActivity"
+            android:label="@string/title_change_profile_activity">
+        </activity>
+
+        <receiver android:name=".activities.MainActivity">
+            <intent-filter>
+                <action android:name="com.unitedcoders.android.broadcasttest.SHOWTOAST"/>
+            </intent-filter>
+        </receiver>
 
         <service
             android:name=".trackservice.RemoteService"

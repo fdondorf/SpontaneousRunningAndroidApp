@@ -36,7 +36,17 @@
             android:layout_height="150dp"
             android:background="@android:color/holo_blue_dark"
             android:padding="8dp" >
- 
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/avatar"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:src="@drawable/ic_avatar_white"
+                android:layout_marginTop="30dp"
+                app:civ_border_width="2dp"
+                app:civ_border_color="@color/white"/>
+            <!--
             <ImageView
                 android:id="@+id/avatar"
                 android:layout_width="50dp"
@@ -44,7 +54,7 @@
                 android:src="@drawable/ic_avatar_white"
                 android:background="@drawable/btn_circle_add"
                 android:layout_marginTop="40dp" />
- 
+               -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="42dp"

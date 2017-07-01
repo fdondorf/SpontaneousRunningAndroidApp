@@ -108,7 +108,6 @@ public class JSONHelper {
         }
     }
 
-
     public static void setStringArrayIfNotEmpty(JSONObject target, String key, List<String> data)
     {
         try {

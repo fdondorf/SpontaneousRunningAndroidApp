@@ -6,6 +6,7 @@ public enum RestUrls {
 	PORT("80"),
 	REST_SERVICE_LOGIN("/spontaneous/secure/auth/token"),
 	REST_SERVICE_USERINFO("/spontaneous/secure/userinfo"),
+	REST_SERVICE_UPDATE_USER("/spontaneous/secure/user/update"),
 	REST_SERVICE_LOGOUT("/spontaneous/secure/auth/revoke"),
 	REST_SERVICE_REGISTER("/spontaneous/register"),
 	REST_SERVICE_TRACKS("/spontaneous/secure/tracks"),

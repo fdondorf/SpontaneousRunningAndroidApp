@@ -23,7 +23,7 @@ public class UserInfoWebService extends GenericAsyncWebservice {
     private WebServiceRequestConfig buildUserInfoRequest() throws SystemException
     {
         final String enpointUrl = RestUrls.SERVER_NAME + ":" + RestUrls.PORT +
-                RestUrls.REST_SERVICE_USERINFO.toString(); //ConfigProvider.INSTANCE.getConfig("userinfo_endpoint");
+                RestUrls.REST_SERVICE_USERINFO.toString();
 
         WebServiceRequestConfig req = new WebServiceRequestConfig(WebServiceRequestConfig.Method.POST, enpointUrl);
         req.addToken(Authentication.INSTANCE.getToken());

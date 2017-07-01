@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="fill_vertical"
+    android:id="@+id/changeProfileView"
+    android:background="@color/ColorLightGrey">
+    
+    <include android:id="@+id/tool_bar_layout" layout="@layout/tool_bar" />
+
+    <RelativeLayout
+        android:id="@+id/profileImageBox"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="55dp"
+        android:gravity="center">
+
+        <RelativeLayout
+            android:id="@+id/profileImageLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="10dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/avatar"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:src="@drawable/ic_avatar"
+                app:civ_border_width="2dp"
+                app:civ_border_color="@color/white"/>
+            <!--
+            <ImageView
+                android:id="@+id/avatar"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@drawable/ic_avatar_white"
+                android:background="@drawable/btn_circle_add"
+                android:layout_marginTop="30dp"
+                android:gravity="center_horizontal" />
+                -->
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/change_profile_label"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:gravity="center_horizontal"
+            android:text="@string/title_change_profile_change_image"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/profileImageLayout"
+            android:textColor="@color/black"/>
+
+    </RelativeLayout>
+
+    <View android:id="@+id/divider_horizontal1"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/profileImageBox"
+        android:background="@android:drawable/divider_horizontal_dark" />
+
+    <!-- Firstname Section -->
+    <RelativeLayout
+        android:id="@+id/profile_firstname_box"
+        android:layout_width="fill_parent"
+        android:layout_height="?android:attr/listPreferredItemHeight"
+        android:layout_below="@+id/divider_horizontal1"
+        android:padding="10dp"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/firstLine_firstname_left"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignWithParentIfMissing="true"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:gravity="center_vertical"
+            android:text="@string/title_change_profile_firstname"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:id="@+id/firstLine_firstname_right"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_toLeftOf="@id/firstLine_firstname_left"
+            android:text="Florian"
+            android:gravity="center_vertical"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    </RelativeLayout>
+
+    <View android:id="@+id/divider_horizontal2"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/profile_firstname_box"
+        android:background="@color/ColorGrey"
+        />
+
+    <!-- Lastname Section -->
+    <RelativeLayout
+        android:id="@+id/profile_lastname_box"
+        android:layout_width="fill_parent"
+        android:layout_height="?android:attr/listPreferredItemHeight"
+        android:layout_below="@+id/divider_horizontal2"
+        android:padding="10dp"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/firstLine_left_lastname"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignWithParentIfMissing="true"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/title_change_profile_lastname"
+            android:gravity="center_vertical"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:id="@+id/firstLine_right_lastname"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_toLeftOf="@id/firstLine_left_lastname"
+            android:text="Dondorf"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:gravity="center_vertical"/>
+
+    </RelativeLayout>
+
+    <View android:id="@+id/divider_horizontal3"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/profile_lastname_box"
+        android:background="@color/ColorGrey"/>
+
+    <!-- E-Mail Section -->
+    <RelativeLayout
+        android:id="@+id/profile_email_box"
+        android:layout_width="fill_parent"
+        android:layout_height="?android:attr/listPreferredItemHeight"
+        android:layout_below="@+id/divider_horizontal3"
+        android:padding="10dp"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/firstLine_left_email"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignWithParentIfMissing="true"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/title_change_profile_email"
+            android:gravity="center_vertical"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:id="@+id/firstLine_right_email"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_toLeftOf="@id/firstLine_left_email"
+            android:text="f.dondorf@googlemail.com"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:gravity="center_vertical"/>
+
+    </RelativeLayout>
+
+    <View android:id="@+id/divider_horizontal4"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/profile_email_box"
+        android:background="@color/ColorGrey"/>
+
+    <!-- Gender Section -->
+    <RelativeLayout
+        android:id="@+id/profile_gender_box"
+        android:layout_width="fill_parent"
+        android:layout_height="?android:attr/listPreferredItemHeight"
+        android:layout_below="@+id/divider_horizontal4"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/firstLine_left_gender"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignWithParentIfMissing="true"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/title_change_profile_gender"
+            android:gravity="center_vertical"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:id="@+id/firstLine_right_gender"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_toLeftOf="@id/firstLine_left_gender"
+            android:text="Male"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:gravity="center_vertical"/>
+
+    </RelativeLayout>
+
+    <View android:id="@+id/divider_horizontal5"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/profile_gender_box"
+        android:background="@color/ColorGrey"/>
+
+    <Button android:id="@+id/btn_savePreferences"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/title_change_profile_save_prefs"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/white"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/custom_button_blue"/>
+
+</RelativeLayout>

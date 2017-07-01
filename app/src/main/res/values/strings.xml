@@ -20,13 +20,35 @@
     
     <!-- Menu -->
 	<string name="title_start">Start</string>
-	<string name="title_startMap">Start</string>
+	<string name="title_startMap">Starte eine Aktivität</string>
+    <string name="subtitle_startMap">Einstellungen</string>
 	<string name="title_myActivities">Aktivitäten CardView</string>
+    <string name="subtitle_myActivities">Das habe ich erreicht</string>
 	<string name="title_myActivitiesList">Aktivitäten</string>
 	<string name="title_myActivitiesREST">Aktivitäten REST</string>
+    <string name="title_preferences">Einstellungen</string>
+    <string name="subtitle_preferences">Ändere deine Einstellungen</string>
 	<string name="title_Logout">Logout</string>
+    <string name="subtitle_Logout">Ich will hier raus</string>
     <string name="label_your_full_name">Name</string>
-	
+
+    <!-- Preferences -->
+    <string name="pref_cat_key_profile">Profileinstellungen</string>
+    <string name="pref_cat_key_other_settings">Allgemeine Einstellungen</string>
+    <string name="pref_title_profile">Mein Profil</string>
+    <string name="pref_summary_profile">Ändere dein Profil</string>
+    <string name="pref_title_prefs_running">Laufeinstellungen</string>
+    <string name="pref_summary_prefs_running">Ändere die Laufeinstellungen</string>
+    <string name="pref_title_language">Sprache</string>
+    <string name="pref_summary_language">Deutsch</string>
+    <string name="pref_title_version">Version</string>
+    <string name="pref_version">0.1</string>
+    <string name="pref_title_buildnumber">Buildnummer</string>
+    <string name="pref_buildnumber">123123</string>
+    <string name="dialog_title_language_select">Sprache wählen</string>
+    <string name="pref_title_firstname">Vorname</string>
+
+
     <!-- Activities -->
     <string name="title_activity_login">Login</string>
     <string name="title_activity_home">Home</string>
@@ -154,12 +176,25 @@
     <string name="error_track_details_url">Endpoint-URL für gettrackdetails falsch oder leer.</string>
     <string name="get_track_details">Lade Aktivität...</string>
     <string name="delete_track">Lösche Aktivität...</string>
+    <string name="title_activity_activity_summary">Aktivität</string>
 
     <!-- MyActivities -->
     <string name="activity">Aktivität</string>
     <string name="save_activities">Speicher Aktivitäten...</string>
     <string name="save_activity">Speicher Aktivität...</string>
     <string name="load_activities">Lade Aktivitäten...</string>
+
+    <!-- ChangeProfile -->
+    <string name="title_change_profile_activity">Profil ändern</string>
+    <string name="title_change_profile_change_image">Profilbild ändern</string>
+    <string name="title_change_profile_firstname">Vorname</string>
+    <string name="title_change_profile_lastname">Nachname</string>
+    <string name="title_change_profile_email">E-Mail</string>
+    <string name="title_change_profile_gender">Geschlecht</string>
+    <string name="title_change_profile_save_prefs">Speichern</string>
+    <string name="save_profile">Speicher Nutzerprofil...</string>
+    <string name="error_change_profile_url">Endpoint-URL für changeProfile (updateUser) falsch oder leer.</string>
+
 
     <!-- Colors -->
     <color name="white">#FFFFFF</color>
@@ -177,7 +212,5 @@
     <color name="lightpurple">#AA66CC</color>
     <color name="fontBlue">#ff3399ff</color>
     <color name="black">#000000</color>
-    
-    <string name="title_activity_activity_summary">Aktivität</string>
 
 </resources>

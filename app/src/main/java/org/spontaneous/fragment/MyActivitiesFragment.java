@@ -26,7 +26,6 @@ import org.spontaneous.core.ITrackingService;
 import org.spontaneous.core.RestUrls;
 import org.spontaneous.core.common.Common;
 import org.spontaneous.core.common.GenericWebService;
-import org.spontaneous.core.common.SystemException;
 import org.spontaneous.core.common.WebServiceCallHandler;
 import org.spontaneous.core.common.WebServiceHandler;
 import org.spontaneous.core.common.WebServiceResponse;
@@ -42,6 +41,7 @@ import org.spontaneous.trackservice.util.TrackingServiceConstants;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 public class MyActivitiesFragment extends ListFragment implements WebServiceHandler {
 
@@ -204,14 +204,14 @@ public class MyActivitiesFragment extends ListFragment implements WebServiceHand
 
 					trackingService = TrackingServiceImpl.getInstance(this.getActivity());
 					track = trackingService.readTrackById(track.getId());
-					trackWS = new SaveTrackWebService(track);
-					trackWS.doRequest(saveTracksCallHandler);
+					trackWS = new SaveTrackWebService(10000, track);
+					trackWS.doSynchronousRequest(saveTracksCallHandler);
 				}
 
-			} catch (SystemException e) {
+			} catch (TimeoutException e) {
 				prgDialog.cancel();
 				DialogHelper.createFatalErrorDialog(this.getActivity(), e.getMessage()).show();
-				Log.e(TAG, "Cannot build proper request", e);
+				Log.e(TAG, "Save track request timed out...", e);
 			}
 		}
 	};

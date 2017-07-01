@@ -76,6 +76,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.concurrent.TimeoutException;
 
 public class ActivitySummaryActivity extends Activity implements OnMapReadyCallback, WebServiceHandler {
 
@@ -556,14 +557,14 @@ public class ActivitySummaryActivity extends Activity implements OnMapReadyCallb
 
 			try {
 
-				tracksWS = new SaveTrackWebService(this.mTrackModel);
-				tracksWS.doRequest(saveTrackCallHandler);
+				tracksWS = new SaveTrackWebService(10000, this.mTrackModel);
+				tracksWS.doSynchronousRequest(saveTrackCallHandler);
 
-			} catch (SystemException e) {
+			} catch (TimeoutException e) {
 
 				prgDialog.cancel();
 				Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-				Log.e(TAG, "Cannot build proper request", e);
+				Log.e(TAG, "Save track request timed out...", e);
 			}
 		}
 	};
