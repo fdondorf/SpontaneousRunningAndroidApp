@@ -12,11 +12,19 @@ import org.spontaneous.core.common.WebServiceCallHandler;
 import org.spontaneous.core.common.WebServiceRequestConfig;
 import org.spontaneous.core.common.WebServiceResponse;
 import org.spontaneous.core.crossdomain.Authentication;
+import org.spontaneous.core.crossdomain.ConfigProvider;
 import org.spontaneous.utility.SecurityUtil;
 
 import java.util.Date;
 
 public class LoginWebService extends GenericAsyncWebservice {
+
+    private Context ctx;
+
+    public LoginWebService(Context ctx) {
+        super();
+        this.ctx = ctx;
+    }
 
     public void doRequest(WebServiceCallHandler requestResult) throws SystemException
     {
@@ -26,8 +34,9 @@ public class LoginWebService extends GenericAsyncWebservice {
 
     private WebServiceRequestConfig buildLoginRequest(WebServiceCallHandler requestResult) throws SystemException
     {
-        final String enpointUrl = RestUrls.SERVER_NAME + ":" + RestUrls.PORT +
-                RestUrls.REST_SERVICE_LOGIN.toString();
+
+        String serverUrl = ConfigProvider.INSTANCE.getConfig(Authentication.INSTANCE.getConfigKey());
+        final String enpointUrl = serverUrl + RestUrls.REST_SERVICE_LOGIN.toString();
 
         WebServiceRequestConfig req = new WebServiceRequestConfig(WebServiceRequestConfig.Method.POST, enpointUrl);
         req.postAsJSON = false;

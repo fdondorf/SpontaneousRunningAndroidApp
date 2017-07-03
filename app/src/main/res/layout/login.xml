@@ -67,7 +67,16 @@
 	            android:padding="10dip"
 	            android:textColor="#e30000"
 	            android:textStyle="bold" />
-	
+
+		  <Spinner
+			  android:layout_width="fill_parent"
+			  android:layout_height="wrap_content"
+			  android:id="@+id/spEnvironments"
+			  android:spinnerMode="dialog"
+			  android:prompt="@string/env_prompt"
+			  style="@android:style/Widget.Holo.Light.Spinner"
+			  android:entries="@array/env_choices"/>
+
 	        <Button
 	            android:id="@+id/btnLogin"
 	            android:layout_width="fill_parent"

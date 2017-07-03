@@ -89,7 +89,12 @@ public class StartFragmentMap extends Fragment implements LocationListener, OnMa
 	    button.setOnClickListener(mBtnStartActivityListener);
 
 	    gpsLocationListener = GPSListener.getInstance(getActivity(), this);
-		gpsLocationListener.getLocationManager().requestLocationUpdates(gpsLocationListener.getProvider(), 500, 1, this);
+		try {
+			gpsLocationListener.getLocationManager().requestLocationUpdates(gpsLocationListener.getProvider(), 500, 1, this);
+		}
+		catch (Exception e) {
+			;
+		}
 
 	    mCurrentLocation = gpsLocationListener.getCurrentLocation();
 	 	if (mCurrentLocation != null) {

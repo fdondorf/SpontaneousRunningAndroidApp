@@ -10,12 +10,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.net.Uri;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.util.Base64;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -223,7 +226,16 @@ public class MainActivity extends Activity implements SettingsFragment.Callback 
 		@Override
 		public void onReceive(Context ctx, Intent i) {
 			CircleImageView view = (CircleImageView) findViewById(R.id.avatar);
-			view.setImageURI(Uri.parse(UserInfo.INSTANCE.getUserInfo().getProfileImage()));
+			byte [] image = Base64.decode(UserInfo.INSTANCE.getUserInfo().getProfileImage(), Base64.DEFAULT);
+			Bitmap bm = BitmapFactory.decodeByteArray(image, 0, image.length);
+			DisplayMetrics dm = new DisplayMetrics();
+			getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+			view.setMinimumHeight(dm.heightPixels);
+			view.setMinimumWidth(dm.widthPixels);
+			view.setImageBitmap(bm);
+
+			//view.setImageURI(Uri.parse(UserInfo.INSTANCE.getUserInfo().getProfileImage()));
 		}
 	};
 
@@ -333,7 +345,17 @@ public class MainActivity extends Activity implements SettingsFragment.Callback 
 
 		if (UserInfo.INSTANCE.getUserInfo().getProfileImage() != null) {
 			CircleImageView view = (CircleImageView) findViewById(R.id.avatar);
-			view.setImageURI(Uri.parse(UserInfo.INSTANCE.getUserInfo().getProfileImage()));
+
+			byte [] image = Base64.decode(UserInfo.INSTANCE.getUserInfo().getProfileImage(), Base64.DEFAULT);
+			Bitmap bm = BitmapFactory.decodeByteArray(image, 0, image.length);
+			DisplayMetrics dm = new DisplayMetrics();
+			getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+			view.setMinimumHeight(dm.heightPixels);
+			view.setMinimumWidth(dm.widthPixels);
+			view.setImageBitmap(bm);
+
+			//ew.setIm.setImageURI(Uri.parse(UserInfo.INSTANCE.getUserInfo().getProfileImage()));
 		}
 	}
 

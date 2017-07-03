@@ -11,6 +11,7 @@ import org.spontaneous.core.common.WebServiceCallHandler;
 import org.spontaneous.core.common.WebServiceRequestConfig;
 import org.spontaneous.core.common.WebServiceResponse;
 import org.spontaneous.core.crossdomain.Authentication;
+import org.spontaneous.core.crossdomain.ConfigProvider;
 import org.spontaneous.core.crossdomain.UserInfo;
 
 import java.util.concurrent.TimeoutException;
@@ -38,7 +39,8 @@ public class SaveTrackWebService extends GenericSyncWebservice {
 
     private WebServiceRequestConfig buildCreateTrackRequest()
     {
-        final String enpointUrl = RestUrls.SERVER_NAME + ":" + RestUrls.PORT +
+        String serverUrl = ConfigProvider.INSTANCE.getConfig(Authentication.INSTANCE.getConfigKey());
+        final String enpointUrl = serverUrl +
                 RestUrls.REST_SERVICE_TRACK_UPDATE_ALL.toString();
 
         WebServiceRequestConfig req = new WebServiceRequestConfig(WebServiceRequestConfig.Method.POST, enpointUrl);

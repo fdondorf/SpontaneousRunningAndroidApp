@@ -12,6 +12,7 @@ import org.spontaneous.core.common.WebServiceCallHandler;
 import org.spontaneous.core.common.WebServiceRequestConfig;
 import org.spontaneous.core.common.WebServiceResponse;
 import org.spontaneous.core.crossdomain.Authentication;
+import org.spontaneous.core.crossdomain.ConfigProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,8 @@ public class GetTracksWebService extends GenericAsyncWebservice {
 
     private WebServiceRequestConfig buildCreateTrackRequest() throws SystemException
     {
-        final String enpointUrl = RestUrls.SERVER_NAME + ":" + RestUrls.PORT +
+        String serverUrl = ConfigProvider.INSTANCE.getConfig(Authentication.INSTANCE.getConfigKey());
+        final String enpointUrl = serverUrl +
                 RestUrls.REST_SERVICE_TRACKS.toString();
 
         WebServiceRequestConfig req = new WebServiceRequestConfig(WebServiceRequestConfig.Method.POST, enpointUrl);

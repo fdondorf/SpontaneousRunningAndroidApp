@@ -38,7 +38,7 @@ public class UserDAO implements SerializableJSON<UserDAO> {
         JSONHelper.setStringIfNotEmpty(to, "gender", gender);
         JSONHelper.setBooleanIfNotEmpty(to, "stayLogged", stayLogged);
         JSONHelper.setStringArrayIfNotEmpty(to, "roles", authorities);
-        JSONHelper.setStringIfNotEmpty(to, "profileImage", profileImage);
+        JSONHelper.setStringIfNotEmpty(to, "image", profileImage);
 
         return to;
     }
@@ -53,7 +53,7 @@ public class UserDAO implements SerializableJSON<UserDAO> {
         gender = JSONHelper.getStringFailsafe(to, "gender", "");
         stayLogged = JSONHelper.getBooleanFailsafe(to, "stayLogged", false);
         authorities = JSONHelper.getStringArrayFailsafe(to, "roles", null);
-        profileImage = JSONHelper.getStringFailsafe(to, "profileImage", null);
+        profileImage = JSONHelper.getStringFailsafe(to, "image", null);
         return this;
     }
 

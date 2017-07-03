@@ -14,7 +14,10 @@ public class Constants
    public static final String PREF_LASTNAME = "org.spontaneous.Lastname";
    public static final String PREF_EMAIL = "org.spontaneous.Email";
    public static final String PREF_STAY_LOGGED = "org.spontaneous.StayLogged";
-   
+   public static final String PREF_CONFIG_KEY = "org.spontaneous.ConfigKey";
+
+   public static final int CONNECTION_TIMEOUT = 20000;
+
    public static final String DISABLEBLANKING = "disableblanking";
    public static final String DISABLEDIMMING = "disabledimming";
    public static final String SATELLITE = "SATELLITE";

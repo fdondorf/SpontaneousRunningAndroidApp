@@ -2,7 +2,7 @@ package org.spontaneous.core;
 
 public enum RestUrls {
 
-	SERVER_NAME("http://178.238.226.22"), //"http://192.168.178.38"),
+	SERVER_NAME("http://178.238.226.22"),
 	PORT("80"),
 	REST_SERVICE_LOGIN("/spontaneous/secure/auth/token"),
 	REST_SERVICE_USERINFO("/spontaneous/secure/userinfo"),
@@ -14,13 +14,6 @@ public enum RestUrls {
 	REST_SERVICE_TRACK_CREATE("/spontaneous/secure/track"),
 	REST_SERVICE_TRACK_DELETE("/spontaneous/secure/tracks/delete/"),
 	REST_SERVICE_TRACK_UPDATE_ALL("/spontaneous/secure/updateTrack");
-	/*
-	REST_SERVICE_TRACKS("/oasp4j-sample-server/services/rest/trackmanagement/v1/tracks"),
-	REST_SERVICE_CSRFTOKEN("/oasp4j-sample-server/services/rest/security/v1/csrftoken"),
-	REST_SERVICE_LOGIN("/oasp4j-sample-server/services/rest/login"),
-	REST_SERVICE_LOGOUT("/oasp4j-sample-server/services/rest/logout"),
-	REST_SERVICE_CURRENTUSER("/oasp4j-sample-server/services/rest/security/v1/currentuser/");
-	*/
 
 	private final String url;
 	

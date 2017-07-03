@@ -8,9 +8,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.spontaneous.R;
@@ -28,6 +31,7 @@ import org.spontaneous.core.common.WebServiceResponse;
 import org.spontaneous.core.common.error.ErrorType;
 import org.spontaneous.core.common.error.SystemError;
 import org.spontaneous.core.crossdomain.Authentication;
+import org.spontaneous.core.crossdomain.ConfigProvider;
 import org.spontaneous.core.impl.LoginWebService;
 import org.spontaneous.core.impl.UserInfoWebService;
 import org.spontaneous.utility.Constants;
@@ -36,7 +40,7 @@ import org.spontaneous.utility.Constants;
  * Created by fdondorf on 12.11.2016.
  */
 
-public class LoginActivity extends Activity implements WebServiceHandler {
+public class LoginActivity extends Activity implements WebServiceHandler, AdapterView.OnItemSelectedListener {
 
     private static final String TAG = LoginActivity.class.toString();
 
@@ -55,6 +59,9 @@ public class LoginActivity extends Activity implements WebServiceHandler {
 
     private CheckBox stayLoggedIn;
 
+    private Spinner spEnvironments;
+
+    private ArrayAdapter adapterEnvItems;
     private SharedPreferences sharedPrefs;
 
     private ProgressDialog prgDialog;
@@ -80,6 +87,15 @@ public class LoginActivity extends Activity implements WebServiceHandler {
         pwdET = (EditText)findViewById(R.id.loginPassword);
 
         stayLoggedIn = (CheckBox) findViewById(R.id.cb_stayLoggedIn);
+
+        // Initialize environment spinner
+        spEnvironments = (Spinner) findViewById(R.id.spEnvironments);
+        spEnvironments.setOnItemSelectedListener(this);
+
+        adapterEnvItems = new ArrayAdapter(this,
+                android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.env_choices));
+        adapterEnvItems.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spEnvironments.setAdapter(adapterEnvItems);
 
         // Instantiate Progress Dialog object
         prgDialog = new ProgressDialog(this);
@@ -113,6 +129,19 @@ public class LoginActivity extends Activity implements WebServiceHandler {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView parent, View view, int position, long id) {
+        // On selecting a spinner item
+        String item = parent.getItemAtPosition(position).toString();
+        Authentication.INSTANCE.setConfigKey(item);
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        ;
     }
 
     private TimeoutHandler requestTimeout = new TimeoutHandler() {
@@ -214,11 +243,10 @@ public class LoginActivity extends Activity implements WebServiceHandler {
                 return;
             }
 
-            final String enpointUrl = "http://localhost:8080" +
-                    RestUrls.REST_SERVICE_LOGIN.toString(); //ConfigProvider.INSTANCE.getConfig("login_endpoint");
+            String serverUrl = ConfigProvider.INSTANCE.getConfig(Authentication.INSTANCE.getConfigKey());
+            final String enpointUrl = serverUrl + RestUrls.REST_SERVICE_LOGIN.toString();
 
             if (enpointUrl == null) {
-
                 //GuiHelper.showFatalConfigError(this, "Login");
                 errorMsg.setText(getString(R.string.error_login_url));
 
@@ -226,7 +254,7 @@ public class LoginActivity extends Activity implements WebServiceHandler {
 
                 try {
 
-                    loginWS = new LoginWebService();
+                    loginWS = new LoginWebService(this);
                     loginWS.setParam("login", mUserId);
                     loginWS.setParam("password", mPassword);
 
@@ -258,8 +286,8 @@ public class LoginActivity extends Activity implements WebServiceHandler {
             return;
         }
 
-        final String enpointUrl = RestUrls.SERVER_NAME + ":" + RestUrls.PORT +
-                RestUrls.REST_SERVICE_USERINFO.toString(); //ConfigProvider.INSTANCE.getConfig("userinfo_endpoint");
+        String serverUrl = ConfigProvider.INSTANCE.getConfig(Authentication.INSTANCE.getConfigKey());
+        final String enpointUrl = serverUrl + RestUrls.REST_SERVICE_USERINFO.toString();
 
         if (enpointUrl == null) {
             errorMsg.setText(getString(R.string.error_userinfo_url));
@@ -301,6 +329,7 @@ public class LoginActivity extends Activity implements WebServiceHandler {
     {
         Authentication.INSTANCE.setRememberedUserName(emailET.getText().toString());
         Authentication.INSTANCE.setRememberLogin(stayLoggedIn.isChecked());
+
         webService.interpretResponse(response);
         attemptGetUserInfo();
     }
@@ -430,6 +459,7 @@ public class LoginActivity extends Activity implements WebServiceHandler {
         requestTimeout.resume();
         //fillFormIfCan();
         //PlayServicesHelper.INSTANCE.reset();
+
         super.onResume();
     }
 

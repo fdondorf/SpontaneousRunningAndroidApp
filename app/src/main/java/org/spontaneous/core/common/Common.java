@@ -4,6 +4,7 @@ import android.content.Context;
 
 import org.spontaneous.activities.MainActivity;
 import org.spontaneous.core.crossdomain.Authentication;
+import org.spontaneous.core.crossdomain.ConfigProvider;
 import org.spontaneous.core.crossdomain.UserInfo;
 import org.spontaneous.utility.LanguageUtil;
 import org.spontaneous.utility.StorageUtil;
@@ -61,6 +62,7 @@ public class Common {
         public static final String USER_NAME = Common.BASE + ".user_name";
         public static final String USER_STAY_LOGGED = Common.BASE + ".user_stay_logged";
         public static final String BUILD_NUMBER = Common.BASE + ".build_number";
+        public static final String CONFIG_KEY = Common.BASE + ".user_config_key";
     }
 
     public static final class Flags {
@@ -223,6 +225,7 @@ public class Common {
         StorageUtil.INSTANCE.setContext(ctx);
         Authentication.INSTANCE.setContext(ctx);
         UserInfo.INSTANCE.setContext(ctx);
+        ConfigProvider.INSTANCE.setContext(ctx);
     }
 
     public static final int MINUTE_AS_SECONDS = 60;

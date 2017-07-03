@@ -9,6 +9,7 @@ import org.spontaneous.core.common.WebServiceCallHandler;
 import org.spontaneous.core.common.WebServiceRequestConfig;
 import org.spontaneous.core.common.WebServiceResponse;
 import org.spontaneous.core.crossdomain.Authentication;
+import org.spontaneous.core.crossdomain.ConfigProvider;
 
 public class LogoutWebService extends GenericAsyncWebservice {
 
@@ -20,7 +21,8 @@ public class LogoutWebService extends GenericAsyncWebservice {
 
     private WebServiceRequestConfig buildLogoutRequest()
     {
-        final String enpointUrl = RestUrls.SERVER_NAME + ":" + RestUrls.PORT +
+        String serverUrl = ConfigProvider.INSTANCE.getConfig(Authentication.INSTANCE.getConfigKey());
+        final String enpointUrl = serverUrl +
                 RestUrls.REST_SERVICE_LOGOUT; //ConfigProvider.INSTANCE.getConfig("logout_endpoint");
 
         WebServiceRequestConfig req = new WebServiceRequestConfig(WebServiceRequestConfig.Method.POST, enpointUrl);

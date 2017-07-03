@@ -11,6 +11,12 @@
       <item>Englisch</item>
    </string-array>
 
+   <string-array name="env_choices">
+      <item>local</item>
+      <item>ref</item>
+      <item>prod</item>
+   </string-array>
+
    <string-array
       name="state_choices">
       <item>Active</item>

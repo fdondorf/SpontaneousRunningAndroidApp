@@ -103,10 +103,10 @@ public class UserModel implements SerializableJSON<UserModel> {
 
 		JSONHelper.setLongIfNotEmpty(to, "id", id);
 		JSONHelper.setStringIfNotEmpty(to, "email", email);
-		JSONHelper.setStringIfNotEmpty(to, "firstName", firstname);
-		JSONHelper.setStringIfNotEmpty(to, "lastName", lastname);
+		JSONHelper.setStringIfNotEmpty(to, "firstname", firstname);
+		JSONHelper.setStringIfNotEmpty(to, "lastname", lastname);
 		JSONHelper.setStringIfNotEmpty(to, "gender", gender);
-		JSONHelper.setStringIfNotEmpty(to, "profileImage", profileImage);
+		JSONHelper.setStringIfNotEmpty(to, "image", profileImage);
 
 		return to;
 	}

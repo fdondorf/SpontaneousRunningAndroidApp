@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -25,6 +27,7 @@ import android.widget.Toast;
 import android.widget.Toolbar;
 
 import org.spontaneous.R;
+import org.spontaneous.activities.model.UserModel;
 import org.spontaneous.activities.util.CustomExceptionHandler;
 import org.spontaneous.activities.util.DialogHelper;
 import org.spontaneous.activities.util.TimeoutHandler;
@@ -36,13 +39,19 @@ import org.spontaneous.core.common.WebServiceHandler;
 import org.spontaneous.core.common.WebServiceResponse;
 import org.spontaneous.core.common.error.ErrorType;
 import org.spontaneous.core.common.error.SystemError;
+import org.spontaneous.core.crossdomain.Authentication;
+import org.spontaneous.core.crossdomain.ConfigProvider;
 import org.spontaneous.core.crossdomain.UserInfo;
 import org.spontaneous.core.dao.UserDAO;
 import org.spontaneous.core.impl.ChangeProfileWebService;
 import org.spontaneous.utility.Constants;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 public class ChangeProfileActivity extends Activity implements WebServiceHandler {
 
@@ -113,6 +122,8 @@ public class ChangeProfileActivity extends Activity implements WebServiceHandler
   }
 
 	private void initGUIComponents(final Activity activity) {
+
+		UserDAO userInfo = UserInfo.INSTANCE.getUserInfo();
 
 		mProfileImageBox = (View) findViewById(R.id.profileImageBox);
 		mProfileImageBox.setOnClickListener(new View.OnClickListener() {
@@ -227,19 +238,35 @@ public class ChangeProfileActivity extends Activity implements WebServiceHandler
 	  switch(requestCode) {
 		  case 0:
 			  if(resultCode == RESULT_OK){
-				  Uri selectedImage = imageReturnedIntent.getData();
-				  mImageView.setImageURI(selectedImage);
-				  this.changedProfileImage = selectedImage.toString();
-				  changedProfile();
+				  try {
+					  Uri selectedImage = imageReturnedIntent.getData();
+					  mImageView.setImageURI(selectedImage);
+
+					  InputStream iStream = getContentResolver().openInputStream(selectedImage);
+					  byte[] inputData = getBytes(iStream);
+
+					  this.changedProfileImage = Base64.encodeToString(inputData, Base64.DEFAULT);
+					  changedProfile();
+				  } catch (IOException io) {
+					  Log.e(TAG, "Exception during streaming image...", io);
+				  }
 			  }
 
 			  break;
 		  case 1:
 			  if(resultCode == RESULT_OK){
-				  Uri selectedImage = imageReturnedIntent.getData();
-				  mImageView.setImageURI(selectedImage);
-				  this.changedProfileImage = selectedImage.toString();
-				  changedProfile();
+				  try {
+					  Uri selectedImage = imageReturnedIntent.getData();
+					  mImageView.setImageURI(selectedImage);
+
+					  InputStream iStream = getContentResolver().openInputStream(selectedImage);
+					  byte[] inputData = getBytes(iStream);
+
+					  this.changedProfileImage = Base64.encodeToString(inputData, Base64.DEFAULT);
+					  changedProfile();
+				  } catch (IOException io) {
+					  Log.e(TAG, "Exception during streaming image...", io);
+				  }
 			  }
 			  break;
 	  }
@@ -278,15 +305,35 @@ public class ChangeProfileActivity extends Activity implements WebServiceHandler
 			return;
 		}
 
-		final String endpointUrl = RestUrls.SERVER_NAME + ":" + RestUrls.PORT +
-				RestUrls.REST_SERVICE_UPDATE_USER.toString();
+		String serverUrl = ConfigProvider.INSTANCE.getConfig(Authentication.INSTANCE.getConfigKey());
+		final String endpointUrl = serverUrl + RestUrls.REST_SERVICE_UPDATE_USER.toString();
 
 		if (endpointUrl == null) {
 			Toast.makeText(this, getString(R.string.error_change_profile_url), Toast.LENGTH_SHORT).show();
 
 		} else {
 
-			// TODO: Call Save profile webservice
+			try {
+
+				UserModel userModel = new UserModel(
+						UserInfo.INSTANCE.getUserInfo().getUserId(),
+						this.mFirstname.getText().toString(),
+						this.mLastname.getText().toString(),
+						this.mEmail.getText().toString()
+				);
+				userModel.setGender(this.mGender.getText().toString());
+				if (this.changedProfileImage != null)
+				userModel.setProfileImage(this.changedProfileImage);
+
+				changeProfileWS = new ChangeProfileWebService(Constants.CONNECTION_TIMEOUT, userModel);
+				changeProfileWS.doSynchronousRequest(changeProfileCallHandler);
+
+			} catch (TimeoutException te) {
+
+				prgDialog.cancel();
+				Log.e(TAG, "TimeoutExceptoin during request", te);
+
+			}
 			saveUserInfo();
 		}
 	};
@@ -470,4 +517,15 @@ public class ChangeProfileActivity extends Activity implements WebServiceHandler
 		startActivityForResult(takePicture, 0);//zero can be replaced with any action code
 	}
 
+	public byte[] getBytes(InputStream inputStream) throws IOException {
+		ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+		int bufferSize = 1024;
+		byte[] buffer = new byte[bufferSize];
+
+		int len = 0;
+		while ((len = inputStream.read(buffer)) != -1) {
+			byteBuffer.write(buffer, 0, len);
+		}
+		return byteBuffer.toByteArray();
+	}
 }

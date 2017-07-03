@@ -213,4 +213,27 @@ public enum Authentication {
         }
     }
 
+    /**
+     * Sets the chosen config key
+     */
+    public boolean setConfigKey(String configKey)
+    {
+        if (nonCryptoStorage != null) {
+            return nonCryptoStorage.store(PrefDomain.USER_PREFERENCES, PrefParams.CONFIG_KEY, configKey);
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Get the chosen config key of the user
+     */
+    public String getConfigKey()
+    {
+        if (nonCryptoStorage != null) {
+            return nonCryptoStorage.restore(PrefDomain.USER_PREFERENCES, PrefParams.CONFIG_KEY, "");
+        } else {
+            return "";
+        }
+    }
 }

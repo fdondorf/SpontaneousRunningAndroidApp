@@ -10,6 +10,8 @@ import org.spontaneous.core.common.SystemException;
 import org.spontaneous.core.common.WebServiceCallHandler;
 import org.spontaneous.core.common.WebServiceRequestConfig;
 import org.spontaneous.core.common.WebServiceResponse;
+import org.spontaneous.core.crossdomain.Authentication;
+import org.spontaneous.core.crossdomain.ConfigProvider;
 
 /**
  * Created by fdondorf on 22.11.2016.
@@ -25,7 +27,8 @@ public class RegisterWebService extends GenericAsyncWebservice {
 
     private WebServiceRequestConfig buildRegisterRequest() throws SystemException
     {
-        final String enpointUrl = RestUrls.SERVER_NAME + ":" + RestUrls.PORT +
+        String serverUrl = ConfigProvider.INSTANCE.getConfig(Authentication.INSTANCE.getConfigKey());
+        final String enpointUrl = serverUrl +
                 RestUrls.REST_SERVICE_REGISTER.toString();
 
         WebServiceRequestConfig req = new WebServiceRequestConfig(WebServiceRequestConfig.Method.POST, enpointUrl);

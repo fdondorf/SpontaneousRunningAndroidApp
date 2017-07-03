@@ -17,6 +17,11 @@
     <string name="copyright">Copyright</string>
     <string name="version">Version</string>
 	<string name="logo_description">App Logo</string>
+
+    <!-- Configs -->
+    <string name="config_local">http://192.168.178.38:8088</string>
+    <string name="config_ref">TODO</string>
+    <string name="config_prod">http://178.238.226.22:80</string>
     
     <!-- Menu -->
 	<string name="title_start">Start</string>
@@ -134,6 +139,7 @@
     <string name="error_userinfo_url">Endpoint-URL für UserInfo falsch oder leer.</string>
     <string name="error_incorrect_password">Passwort nicht korrekt</string>
     <string name="error_auth_wrong_credentials_msg">Fehler bei der Anmeldung. Zugangsdaten nicht korrekt.</string>
+    <string name="env_prompt">Umgebung wählen</string>
 
 	<!-- Register Activity -->
 	<string name="register">Registrieren</string>
