@@ -133,7 +133,7 @@ public class ActivitySummaryActivity extends Activity implements OnMapReadyCallb
 	  	// Toolbar
 	  	toolbar = (Toolbar) findViewById(R.id.tool_bar);
 	  	toolbar.setTitle(R.string.title_activity_activity_summary);
-	  		toolbar.inflateMenu(R.menu.activity_summary);
+		toolbar.inflateMenu(R.menu.activity_summary);
 	  	toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
 
 		toolbar.setNavigationOnClickListener(new View.OnClickListener() {

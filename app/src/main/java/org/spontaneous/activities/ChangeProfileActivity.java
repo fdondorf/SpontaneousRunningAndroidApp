@@ -45,6 +45,7 @@ import org.spontaneous.core.crossdomain.UserInfo;
 import org.spontaneous.core.dao.UserDAO;
 import org.spontaneous.core.impl.ChangeProfileWebService;
 import org.spontaneous.utility.Constants;
+import org.spontaneous.utility.ImageUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -66,6 +67,7 @@ public class ChangeProfileActivity extends Activity implements WebServiceHandler
 	private ImageView mImageView;
 	private View mFirstnameBox;
   	private TextView mFirstname;
+	private View mLastnameBox;
 	private TextView mLastname;
 	private TextView mEmail;
 	private TextView mGender;
@@ -123,8 +125,6 @@ public class ChangeProfileActivity extends Activity implements WebServiceHandler
 
 	private void initGUIComponents(final Activity activity) {
 
-		UserDAO userInfo = UserInfo.INSTANCE.getUserInfo();
-
 		mProfileImageBox = (View) findViewById(R.id.profileImageBox);
 		mProfileImageBox.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -133,17 +133,25 @@ public class ChangeProfileActivity extends Activity implements WebServiceHandler
 		});
 
 		mImageView = (ImageView) findViewById(R.id.avatar);
+		ImageUtil.setImageToView(mImageView, UserInfo.INSTANCE.getUserInfo().getProfileImage(),
+				getWindowManager());
 
 		mFirstnameBox = (View) findViewById(R.id.profile_firstname_box);
 		mFirstnameBox.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				showEditTextDialog();
+				showEditTextDialogForFirstname();
 			}
 		});
 
 		mFirstname = (TextView) findViewById(R.id.firstLine_firstname_right);
 		mFirstname.setText(UserInfo.INSTANCE.getUserInfo().getFirstName());
 
+		mLastnameBox = (View) findViewById(R.id.profile_lastname_box);
+		mLastnameBox.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				showEditTextDialogForLastname();
+			}
+		});
 		mLastname = (TextView) findViewById(R.id.firstLine_right_lastname);
 		mLastname.setText(UserInfo.INSTANCE.getUserInfo().getLastName());
 
@@ -238,39 +246,33 @@ public class ChangeProfileActivity extends Activity implements WebServiceHandler
 	  switch(requestCode) {
 		  case 0:
 			  if(resultCode == RESULT_OK){
-				  try {
-					  Uri selectedImage = imageReturnedIntent.getData();
-					  mImageView.setImageURI(selectedImage);
-
-					  InputStream iStream = getContentResolver().openInputStream(selectedImage);
-					  byte[] inputData = getBytes(iStream);
-
-					  this.changedProfileImage = Base64.encodeToString(inputData, Base64.DEFAULT);
-					  changedProfile();
-				  } catch (IOException io) {
-					  Log.e(TAG, "Exception during streaming image...", io);
-				  }
+				  Uri selectedImage = imageReturnedIntent.getData();
+				  setImageToView(selectedImage);
 			  }
 
 			  break;
 		  case 1:
 			  if(resultCode == RESULT_OK){
-				  try {
-					  Uri selectedImage = imageReturnedIntent.getData();
-					  mImageView.setImageURI(selectedImage);
-
-					  InputStream iStream = getContentResolver().openInputStream(selectedImage);
-					  byte[] inputData = getBytes(iStream);
-
-					  this.changedProfileImage = Base64.encodeToString(inputData, Base64.DEFAULT);
-					  changedProfile();
-				  } catch (IOException io) {
-					  Log.e(TAG, "Exception during streaming image...", io);
-				  }
+				  Uri selectedImage = imageReturnedIntent.getData();
+				  setImageToView(selectedImage);
 			  }
 			  break;
 	  }
-  }
+  	}
+
+	private void setImageToView(Uri selectedImage) {
+		try {
+			this.mImageView.setImageURI(selectedImage);
+
+			InputStream iStream = getContentResolver().openInputStream(selectedImage);
+			byte[] inputData = getBytes(iStream);
+
+			this.changedProfileImage = Base64.encodeToString(inputData, Base64.DEFAULT);
+			setProfileChanged();
+		} catch (IOException io) {
+			Log.e(TAG, "Exception during streaming image...", io);
+		}
+	}
 
   	/****************************************
   	 * Listener
@@ -432,7 +434,7 @@ public class ChangeProfileActivity extends Activity implements WebServiceHandler
 		}
 	}
 
-	private void showEditTextDialog() {
+	private void showEditTextDialogForFirstname() {
 		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
 		LayoutInflater inflater = this.getLayoutInflater();
 		final View dialogView = inflater.inflate(R.layout.dialog_cust_edit_text, null);
@@ -441,7 +443,7 @@ public class ChangeProfileActivity extends Activity implements WebServiceHandler
 		final EditText edt = (EditText) dialogView.findViewById(R.id.edit1);
 		edt.setText(mFirstname.getText());
 
-		dialogBuilder.setTitle("Vornamen ändern");
+		dialogBuilder.setTitle(getResources().getString(R.string.title_change_profile_firstname));
 		dialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				changeFirstname(edt.getText().toString());
@@ -457,20 +459,50 @@ public class ChangeProfileActivity extends Activity implements WebServiceHandler
 		b.show();
 	}
 
-	private void changeFirstname(String firstname) {
-		changedFirstname = firstname;
-		this.mFirstname.setText(firstname);
-		changedProfile();
+	private void showEditTextDialogForLastname() {
+		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+		LayoutInflater inflater = this.getLayoutInflater();
+		final View dialogView = inflater.inflate(R.layout.dialog_cust_edit_text, null);
+		dialogBuilder.setView(dialogView);
+
+		final EditText edt = (EditText) dialogView.findViewById(R.id.edit1);
+		edt.setText(mLastname.getText());
+
+		dialogBuilder.setTitle(getResources().getString(R.string.title_change_profile_lastname));
+		dialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				changeLastname(edt.getText().toString());
+				dialog.cancel();
+			}
+		});
+		dialogBuilder.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				dialog.cancel();
+			}
+		});
+		AlertDialog b = dialogBuilder.create();
+		b.show();
 	}
 
-	private void changedProfile() {
+	private void changeFirstname(String firstname) {
+		this.mFirstname.setText(firstname);
+		setProfileChanged();
+	}
+
+	private void changeLastname(String lastname) {
+		this.mLastname.setText(lastname);
+		setProfileChanged();
+	}
+
+	private void setProfileChanged() {
 		profileChanged = true;
 		mSavePrefsButton.setEnabled(profileChanged);
 	}
 
 	private void saveUserInfo() {
 		UserDAO userDao = UserInfo.INSTANCE.getUserInfo();
-		userDao.setFirstName(this.changedFirstname);
+		userDao.setFirstName(this.mFirstname.getText().toString());
+		userDao.setLastName(this.mLastname.getText().toString());
 		userDao.setProfileImage(this.changedProfileImage);
 		UserInfo.INSTANCE.setUserInfo(userDao);
 	}

@@ -236,7 +236,7 @@ public class SecurityUtil {
      *
      * @param data clear text to encrypt
      * @param key  key used for encryption
-     * @return base64 encoded cipher text, or null on failure
+     * @return base64 encoded cipher text, or null on failure spontaneous-secret
      */
     public static String encrypt(String data, Key key)
     {

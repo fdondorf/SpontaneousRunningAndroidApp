@@ -255,7 +255,7 @@ public class LoginActivity extends Activity implements WebServiceHandler, Adapte
                 try {
 
                     loginWS = new LoginWebService(this);
-                    loginWS.setParam("login", mUserId);
+                    loginWS.setParam("username", mUserId);
                     loginWS.setParam("password", mPassword);
 
                     loginWS.doRequest(loginCallHandler);

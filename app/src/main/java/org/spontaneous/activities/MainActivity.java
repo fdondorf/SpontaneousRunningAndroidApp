@@ -234,8 +234,6 @@ public class MainActivity extends Activity implements SettingsFragment.Callback 
 			view.setMinimumHeight(dm.heightPixels);
 			view.setMinimumWidth(dm.widthPixels);
 			view.setImageBitmap(bm);
-
-			//view.setImageURI(Uri.parse(UserInfo.INSTANCE.getUserInfo().getProfileImage()));
 		}
 	};
 

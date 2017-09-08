@@ -41,7 +41,7 @@ public class LoginWebService extends GenericAsyncWebservice {
         WebServiceRequestConfig req = new WebServiceRequestConfig(WebServiceRequestConfig.Method.POST, enpointUrl);
         req.postAsJSON = false;
 
-        setRequiredParams(req, new String[]{"login", "password"}, new String[]{"username", "password"});
+        setRequiredParams(req, new String[]{"username", "password"}, new String[]{"username", "password"});
 
         req.setParam("grant_type", "password");
 

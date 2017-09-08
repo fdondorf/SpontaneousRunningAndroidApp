@@ -19,7 +19,7 @@
 	<string name="logo_description">App Logo</string>
 
     <!-- Configs -->
-    <string name="config_local">http://192.168.178.38:8088</string>
+    <string name="config_local">http://localhost:8088</string>
     <string name="config_ref">TODO</string>
     <string name="config_prod">http://178.238.226.22:80</string>
     
@@ -193,14 +193,13 @@
     <!-- ChangeProfile -->
     <string name="title_change_profile_activity">Profil ändern</string>
     <string name="title_change_profile_change_image">Profilbild ändern</string>
-    <string name="title_change_profile_firstname">Vorname</string>
-    <string name="title_change_profile_lastname">Nachname</string>
+    <string name="title_change_profile_firstname">Vornamen ändern</string>
+    <string name="title_change_profile_lastname">Nachnamen ändern</string>
     <string name="title_change_profile_email">E-Mail</string>
-    <string name="title_change_profile_gender">Geschlecht</string>
+    <string name="title_change_profile_gender">Geschlecht ändern</string>
     <string name="title_change_profile_save_prefs">Speichern</string>
     <string name="save_profile">Speicher Nutzerprofil...</string>
     <string name="error_change_profile_url">Endpoint-URL für changeProfile (updateUser) falsch oder leer.</string>
-
 
     <!-- Colors -->
     <color name="white">#FFFFFF</color>
