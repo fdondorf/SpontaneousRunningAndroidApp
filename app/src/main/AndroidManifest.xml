@@ -3,10 +3,6 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-    <uses-sdk
-        android:minSdkVersion="21"
-        android:targetSdkVersion="23" />
-
     <permission
         android:name="org.spontaneous.permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />

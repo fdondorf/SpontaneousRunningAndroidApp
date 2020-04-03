@@ -51,8 +51,9 @@ public class LoginWebService extends GenericAsyncWebservice {
             final String authBasicBase = SecurityUtil.getLoginAuthBasicBase(ctx);
             // To get know AUTH BASIC credentials generated from new random data
             // turn ON insecure logging and uncomment following lines
-            // InsecureLog.i(TAG, "Auth basic USER: "+authBasicBase.substring(0, 32));
-            // InsecureLog.i(TAG, "Auth basic PWD: "+authBasicBase.substring(32, 64));
+
+            //Log.i(TAG, "Auth basic USER: "+authBasicBase.substring(0, 32));
+            //Log.i(TAG, "Auth basic PWD: "+authBasicBase.substring(32, 64));
             req.addAuthBasic(authBasicBase.substring(0, 32), authBasicBase.substring(32, 64));
         }
 

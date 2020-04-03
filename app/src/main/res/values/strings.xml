@@ -19,7 +19,8 @@
 	<string name="logo_description">App Logo</string>
 
     <!-- Configs -->
-    <string name="config_local">http://localhost:8088</string>
+    <string name="config_local">http://192.168.178.64:8081</string>
+    <string name="config_dev_microservices">http://178.238.226.22:8081</string>
     <string name="config_ref">TODO</string>
     <string name="config_prod">http://178.238.226.22:80</string>
     
