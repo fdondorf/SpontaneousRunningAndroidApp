@@ -116,10 +116,11 @@
 
 	    <meta-data
 	            android:name="com.google.android.maps.v2.API_KEY"
-	            android:value="AIzaSyDDhIdy41erLfhWKiLauowIJslKFLyS-2I" />
+	            android:value="AIzaSyClNMS1kJQV2Efn0m2RE3nXjCXA-2EJqv0" />
 	    <meta-data tools:replace="android:value"
 			    android:name="com.google.android.gms.version"
 			    android:value="9877000" />
+
     </application>
 
 </manifest>
