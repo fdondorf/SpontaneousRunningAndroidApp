@@ -8,7 +8,9 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
        	android:theme="@style/ThemeOverlay.AppCompat.Dark"
-        android:background="@color/ColorPrimary">
+        android:background="@color/ColorPrimary"
+        android:titleTextColor="@color/white"
+        android:subtitleTextColor="@color/white">
     </Toolbar>
 
 </LinearLayout>
