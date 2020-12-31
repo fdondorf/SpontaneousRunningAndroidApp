@@ -1,7 +1,5 @@
 package org.spontaneous.core.ws.clients;
 
-import org.apache.http.conn.ssl.SSLSocketFactory;
-
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -16,6 +14,9 @@ import java.security.cert.X509Certificate;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+
+import cz.msebera.android.httpclient.conn.ssl.SSLSocketFactory;
+import cz.msebera.android.httpclient.conn.ssl.TrustStrategy;
 
 /**
  * Factory class for creating TLS Sockets.
@@ -60,7 +61,7 @@ public class TLSSocketFactory extends SSLSocketFactory {
             throws KeyManagementException, NoSuchAlgorithmException,
             KeyStoreException, UnrecoverableKeyException
     {
-        super(null);
+        super(context);
         sslContext = context;
     }
 

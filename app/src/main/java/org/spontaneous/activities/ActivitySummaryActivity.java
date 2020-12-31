@@ -26,7 +26,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 import android.widget.ViewFlipper;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -77,6 +76,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.concurrent.TimeoutException;
+
+import androidx.appcompat.widget.Toolbar;
 
 public class ActivitySummaryActivity extends Activity implements OnMapReadyCallback, WebServiceHandler {
 

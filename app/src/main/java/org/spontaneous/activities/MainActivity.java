@@ -14,9 +14,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -29,7 +26,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import org.spontaneous.R;
 import org.spontaneous.activities.adapter.DrawerListAdapter;
@@ -57,6 +53,10 @@ import org.spontaneous.utility.Constants;
 
 import java.util.ArrayList;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends Activity implements SettingsFragment.Callback {
@@ -188,7 +188,7 @@ public class MainActivity extends Activity implements SettingsFragment.Callback 
 	    mDrawerLayout.setDrawerListener(mDrawerToggle);
 
 	    // Toolbar		
-		toolbar = (Toolbar) findViewById(R.id.tool_bar);
+		toolbar = findViewById(R.id.tool_bar);
 	    toolbar.setTitle(R.string.app_name);
 	    toolbar.setSubtitle(R.string.app_name_subtitle);
 

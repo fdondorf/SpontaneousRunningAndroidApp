@@ -63,6 +63,7 @@
     <string name="unit_km">km</string>
     <string name="title_speed">Geschwindigkeit</string>
     <string name="title_speedPerHour">km/h</string>
+    <string name="service_notification_title">Aktivität gestartet...</string>
     
     <!-- Actions -->
     <string name="action_settings">Einstellungen</string>

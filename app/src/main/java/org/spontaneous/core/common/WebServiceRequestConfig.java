@@ -5,14 +5,15 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 
-import org.apache.http.Header;
-import org.apache.http.message.BasicHeader;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.LinkedList;
 import java.util.List;
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.message.BasicHeader;
 
 public class WebServiceRequestConfig {
     public static final String TAG = WebServiceRequestConfig.class.getSimpleName();

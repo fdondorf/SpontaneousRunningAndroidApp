@@ -111,7 +111,7 @@ public class CurrentActivityActivity extends Activity implements OnMapReadyCallb
 	/** Called when the activity is first created. */
 	  @Override
 	  public void onCreate(Bundle savedInstanceState) {
-	    super.onCreate(savedInstanceState);
+	  	super.onCreate(savedInstanceState);
 
 	    setContentView(R.layout.layout_current_activity);
 	    
@@ -128,66 +128,67 @@ public class CurrentActivityActivity extends Activity implements OnMapReadyCallb
 	    	mStartLocation = (Location) data.getParcelable(TrackingServiceConstants.START_LOCATION);
 	    }
 
-	    // Map
-	    MapFragment mapFragment = (MapFragment) getFragmentManager()
-				  .findFragmentById(R.id.map);
-	    mapFragment.getMapAsync(this);
+	    // Create UI
+		prepareUIElements();
 
-	    viewFlipper = (ViewFlipper) findViewById(R.id.viewflipper);
-	    
-	    latituteField = (TextView) findViewById(R.id.latitudeField);
-	    longitudeField = (TextView) findViewById(R.id.longitudeField);
-	    distanceField = (TextView) findViewById(R.id.distanceText);
-	    distanceField.setText("0.0");
-	    speedField = (TextView) findViewById(R.id.speedText);
-	    speedField.setText("0");
-	    mCaloriesField = (TextView) findViewById(R.id.caloriesValue);
-
-	    mChronometer = (Chronometer) findViewById(R.id.chronometer);
-
-	    mTrackData.setStartTime(System.currentTimeMillis());
-
-	    mCallbackText = (TextView)findViewById(R.id.callback);
-	    mCallbackText.setText("Not attached.");
-
-	    mStopButton = (Button)findViewById(R.id.btn_stop);
-	    mStopButton.setOnClickListener(mStopListener);
-
-	    mResumeButton = (Button) findViewById(R.id.btn_resume);
-	    mPauseButton = (Button) findViewById(R.id.btn_pause);
-
-	    mPauseButton.setVisibility(View.VISIBLE);
-	    mPauseButton.setOnClickListener(mPauseListener);
-
-	    mResumeButton.setVisibility(View.GONE);
-	    mResumeButton.setOnClickListener(mResumeListener);
-
-	    // Aktueller Schnitt
-	    mCurrentTimePerUnit = (TextView) findViewById(R.id.currentAveragePerUnit);
-	    mCurrentTimePerUnit.setText("00:00");
-	    
-	    // Splittimes
-	    List<SplitTimeModel> splitTimes = new ArrayList<SplitTimeModel>();
-		listView = (ListView) findViewById(R.id.splitTimes);
-		listView.setAdapter(new SplitTimeArrayAdapter(this, splitTimes));
-	    
-	    // Starte und Binde den Background-Logging-Service
+		// Start and bind Background-Logging-Service
 	    startAndBindService();
 
-	    // Starte Chronometer
+	    // Start chronometer
 	    mChronometer.start();
 	    
 	    computeAverageSpeed();
 	    computeCaloriesValue();
 	  }
 
+	private void prepareUIElements() {
+		MapFragment mapFragment = (MapFragment) getFragmentManager()
+				  .findFragmentById(R.id.map);
+		mapFragment.getMapAsync(this);
+
+		viewFlipper = (ViewFlipper) findViewById(R.id.viewflipper);
+
+		latituteField = (TextView) findViewById(R.id.latitudeField);
+		longitudeField = (TextView) findViewById(R.id.longitudeField);
+		distanceField = (TextView) findViewById(R.id.distanceText);
+		distanceField.setText("0.0");
+		speedField = (TextView) findViewById(R.id.speedText);
+		speedField.setText("0");
+		mCaloriesField = (TextView) findViewById(R.id.caloriesValue);
+
+		mChronometer = (Chronometer) findViewById(R.id.chronometer);
+
+		mTrackData.setStartTime(System.currentTimeMillis());
+
+		mCallbackText = (TextView)findViewById(R.id.callback);
+		mCallbackText.setText("Not attached.");
+
+		mStopButton = (Button)findViewById(R.id.btn_stop);
+		mStopButton.setOnClickListener(mStopListener);
+
+		mResumeButton = (Button) findViewById(R.id.btn_resume);
+		mPauseButton = (Button) findViewById(R.id.btn_pause);
+
+		mPauseButton.setVisibility(View.VISIBLE);
+		mPauseButton.setOnClickListener(mPauseListener);
+
+		mResumeButton.setVisibility(View.GONE);
+		mResumeButton.setOnClickListener(mResumeListener);
+
+		// Aktueller Schnitt
+		mCurrentTimePerUnit = (TextView) findViewById(R.id.currentAveragePerUnit);
+		mCurrentTimePerUnit.setText("00:00");
+
+		// Splittimes
+		List<SplitTimeModel> splitTimes = new ArrayList<SplitTimeModel>();
+		listView = (ListView) findViewById(R.id.splitTimes);
+		listView.setAdapter(new SplitTimeArrayAdapter(this, splitTimes));
+	}
+
 	public void onMapReady(GoogleMap m) {
 
 		map = m;
-
-		//DO WHATEVER YOU WANT WITH GOOGLEMAP
 		map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-		//map.setMyLocationEnabled(true);
 		map.setTrafficEnabled(true);
 		map.setIndoorEnabled(true);
 		map.setBuildingsEnabled(true);
@@ -248,24 +249,8 @@ public class CurrentActivityActivity extends Activity implements OnMapReadyCallb
 	  }
 	  
 	  private void startAndBindService() {
-		  // Make sure the service is started. It will continue running
-		  // until someone calls stopService().
-		  // We use an action code here, instead of explictly supplying
-		  // the component name, so that other packages can replace
-		  // the service.
-		  //startService(new Intent("com.example.remoteserviceexample.REMOTE_SERVICE"));
-		  Intent service = null;
-		  try {
-			  Log.i(TAG, Class.forName(RemoteService.class.getName()).toString());
-			  service = new Intent(mContext,  Class.forName(RemoteService.class.getName()));
-			  //Log.i(TAG, service.getAction());
-		  } catch (ClassNotFoundException e) {
-			  // TODO Auto-generated catch block
-			  e.printStackTrace();
-		  }
+		  Intent service = new Intent(mContext,  RemoteService.class);
 		  startService(service);
-
-		  // Bind Service
 		  bindService(service);
 	  }
 
@@ -382,23 +367,12 @@ public class CurrentActivityActivity extends Activity implements OnMapReadyCallb
 	    	computeCaloriesValue();
 	    }
 	    else if (!mIsBound) {
-
-	    	Intent service = null;
-			  try {
-				  service = new Intent(mContext,  Class.forName(RemoteService.class.getName()));
-			  } catch (ClassNotFoundException e) {
-				  e.printStackTrace();
-				  DialogHelper.createStandardErrorDialog(this, e.getMessage());
-			  }
+			Intent service = new Intent(mContext,  RemoteService.class);
 	    	bindService(service);
 	    }
 
 	    try {
-	    	
-		    int logState = 0;
-		    if (mService != null)
-		    	logState = mService.loggingState();		    
-	    	
+
 			if (mService != null && mService.loggingState() == TrackingServiceConstants.STOPPED) {
 				mTrackData.setSegmentId(mService.resumeLogging(mTrackData.getTrackId().longValue()));
 				setButtonState(View.VISIBLE, View.GONE);
@@ -468,7 +442,6 @@ public class CurrentActivityActivity extends Activity implements OnMapReadyCallb
 		  }
 		  else if (resultCode == RESULT_ACTIVITY_RESUMED){
 			  mTrackData.setTrackId(intent.getLongExtra(TrackingServiceConstants.TRACK_ID, -1));
-			  System.out.println(mTrackData.getTrackId());
 		  }
 	  }
 

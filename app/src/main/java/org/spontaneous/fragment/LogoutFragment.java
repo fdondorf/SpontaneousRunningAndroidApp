@@ -15,15 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.PersistentCookieStore;
-import com.loopj.android.http.RequestParams;
-
 import org.json.JSONException;
 import org.spontaneous.R;
 import org.spontaneous.activities.LoginActivity;
-import org.spontaneous.activities.LoginActivityOld;
 import org.spontaneous.activities.MainActivity;
 import org.spontaneous.activities.util.DialogHelper;
 import org.spontaneous.activities.util.TimeoutHandler;
@@ -102,6 +96,7 @@ public class LogoutFragment extends Fragment {
 		}
 	}
 
+	/*
 	public void logout(RequestParams params) throws UnsupportedEncodingException, JSONException {
 
     	// Instantiate Progress Dialog object
@@ -152,7 +147,7 @@ public class LogoutFragment extends Fragment {
              }
          });
     }
-
+	*/
 	@Override
 	public void onAttach(Activity activity) {
 	    super.onAttach(activity);
@@ -299,18 +294,19 @@ public class LogoutFragment extends Fragment {
      * Method gets triggered when Register button is clicked
      */
     public void navigatetoLoginActivity() {
-        Intent loginIntent = new Intent(this.getActivity().getApplicationContext(), LoginActivityOld.class);
+        Intent loginIntent = new Intent(this.getActivity().getApplicationContext(), LoginActivity.class);
         loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(loginIntent);
         this.getActivity().finish();
     }
 
+    /*
     private void clearCookieStore() {
     	PersistentCookieStore myStore = new PersistentCookieStore(this.getActivity().getApplicationContext());
     	myStore.clear();
 	}
-
+	*/
   	private boolean createWarnDialog() {
 
   		boolean result = false;

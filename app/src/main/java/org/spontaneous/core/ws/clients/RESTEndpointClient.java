@@ -3,18 +3,6 @@ package org.spontaneous.core.ws.clients;
 
 import android.util.Log;
 
-import org.apache.http.Header;
-import org.apache.http.HttpResponse;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.AbstractHttpClient;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.spontaneous.core.common.WebServiceRequestConfig;
@@ -26,6 +14,20 @@ import org.spontaneous.utility.NetworkUtil;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.UnsupportedCharsetException;
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.HttpResponse;
+import cz.msebera.android.httpclient.auth.AuthScope;
+import cz.msebera.android.httpclient.auth.UsernamePasswordCredentials;
+import cz.msebera.android.httpclient.client.ClientProtocolException;
+import cz.msebera.android.httpclient.client.methods.HttpGet;
+import cz.msebera.android.httpclient.client.methods.HttpPost;
+import cz.msebera.android.httpclient.client.methods.HttpUriRequest;
+import cz.msebera.android.httpclient.entity.StringEntity;
+import cz.msebera.android.httpclient.impl.client.AbstractHttpClient;
+import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
+import cz.msebera.android.httpclient.util.EntityUtils;
 
 public class RESTEndpointClient {
 
@@ -67,10 +69,11 @@ public class RESTEndpointClient {
 
     private AbstractHttpClient buildClient(WebServiceRequestConfig requestConfig)
     {
-        AbstractHttpClient httpClient;
+        DefaultHttpClient httpClient;
         if (!requestConfig.getEndpointURL().startsWith("https://")) {
             Log.d(TAG, "Constructing basic HTTP client");
             httpClient = new DefaultHttpClient();
+            //httpClient = HttpClientBuilder.create()..build();
             httpClient.getCredentialsProvider().setCredentials(AuthScope.ANY,
                     new UsernamePasswordCredentials("spontaneous-client", "spontaneous-secret"));
 
@@ -306,7 +309,7 @@ public class RESTEndpointClient {
     {
         try {
             return new StringEntity(jsonObject.toString(), "UTF-8");
-        } catch (UnsupportedEncodingException e1) {
+        } catch (UnsupportedCharsetException e1) {
             // The JVM doesn't support UTF-8. Likely to happen only
             // on some experimental JVM implementation. Oracle's JVM
             // and Android's Dalvik do support UTF-8.

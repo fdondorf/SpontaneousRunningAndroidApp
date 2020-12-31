@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 		
-    <Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/tool_bar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
@@ -11,6 +11,6 @@
         android:background="@color/ColorPrimary"
         android:titleTextColor="@color/white"
         android:subtitleTextColor="@color/white">
-    </Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
 </LinearLayout>

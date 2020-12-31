@@ -40,6 +40,7 @@ import org.spontaneous.trackservice.util.TrackingServiceConstants;
 import org.spontaneous.utility.Constants;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -53,6 +54,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -64,25 +66,19 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
 import android.renderscript.ScriptGroup.Binding;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
 
-//import com.google.android.gms.internal.nl;
+import androidx.core.app.NotificationCompat;
 
 /**
  * This is an example of implementing an application service that runs in a different process than the application.
  * Because it can be in another process, we must use IPC to interact with it. The {@link Controller} and {@link Binding}
  * classes show how to interact with the service.
- *
- * <p>
- * Note that most applications <strong>do not</strong> need to deal with the complexity shown here. If your application
- * simply has a service running in its own process, the {@link LocalService} sample shows a much simpler way to interact
- * with it.
  */
 public class RemoteService extends Service implements LocationListener {
+
+  private static final String CHANNEL_ID = "ForegroundServiceChannel";
 
   private static final Boolean DEBUG = false;
 
@@ -100,25 +96,7 @@ public class RemoteService extends Service implements LocationListener {
 
   private static final long FINE_INTERVAL = 1000l;
 
-  private static final float FINE_ACCURACY = 20f;
-
-  private static final float NORMAL_DISTANCE = 10F;
-
-  private static final long NORMAL_INTERVAL = 15000l;
-
-  private static final float NORMAL_ACCURACY = 30f;
-
-  private static final float COARSE_DISTANCE = 25F;
-
-  private static final long COARSE_INTERVAL = 30000l;
-
   private static final float COARSE_ACCURACY = 75f;
-
-  private static final float GLOBAL_DISTANCE = 500F;
-
-  private static final long GLOBAL_INTERVAL = 300000l;
-
-  private static final float GLOBAL_ACCURACY = 1000f;
 
   /**
    * <code>MAX_REASONABLE_SPEED</code> is about 324 kilometer per hour or 201 mile per hour.
@@ -176,8 +154,6 @@ public class RemoteService extends Service implements LocationListener {
    * <code>mAcceptableAccuracy</code> indicates the maximum acceptable accuracy of a waypoint in meters.
    */
   private float mMaxAcceptableAccuracy = 20;
-
-  private int mSatellites = 0;
 
   /**
    * Number of milliseconds that a functioning GPS system needs to provide a location. Calculated to be either 120
@@ -250,19 +226,10 @@ public class RemoteService extends Service implements LocationListener {
 
   private int mValue = 0;
 
-  // private NotificationManager mNM;
-
   @Override
   public void onCreate() {
 
-    // mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-
-    // Get start location if available
-
 	registerExceptionHandler();  
-	
-    // Display a notification about us starting.
-    showNotification();
 
     this.mHeartbeatTimer = new Timer("heartbeat", true);
 
@@ -288,14 +255,22 @@ public class RemoteService extends Service implements LocationListener {
   }
 
   @Override
+  public int onStartCommand(Intent intent, int flags, int startId) {
+    super.onStartCommand(intent, flags, startId);
+    prepareForegroundNotification();
+
+    return START_NOT_STICKY;
+  }
+
+  @Override
   public void onDestroy() {
 
     // Cancel the persistent notification.
     this.mNoticationManager.cancel(0);
-    // Tell the user we stopped.
-    Toast.makeText(this, R.string.remote_service_stopped, Toast.LENGTH_SHORT).show();
+
     // Unregister all callbacks.
     this.mCallbacks.kill();
+
     // Remove the next pending message to increment the counter, stopping
     // the increment loop.
     this.mHandler.removeMessages(REPORT_MSG);
@@ -304,25 +279,18 @@ public class RemoteService extends Service implements LocationListener {
 
     stopListening();
 
+    stopSelf();
   }
 
   // BEGIN_INCLUDE(exposing_a_service)
   @Override
   public IBinder onBind(Intent intent) {
 
-    // Select the interface to return. If your service only implements
-    // a single interface, you can just return it here without checking
-    // the Intent.
-    try {
-    	Log.i(TAG, IRemoteService.class.getName().toString());
-    	Log.i(TAG, intent.getComponent().getClassName());
-		if (Class.forName(RemoteService.class.getName()).toString().equals(intent.getComponent().getClassName())) {
-		  return this.mBinder;
-		}
-	} catch (ClassNotFoundException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+    Log.i(TAG, IRemoteService.class.getName());
+    Log.i(TAG, intent.getComponent().getClassName());
+    if (RemoteService.class.getName().toString().equals(intent.getComponent().getClassName())) {
+      return this.mBinder;
+    }
     return this.mBinder;
   }
 
@@ -390,11 +358,6 @@ public class RemoteService extends Service implements LocationListener {
   };
 
   // END_INCLUDE(exposing_a_service)
-  @Override
-  public void onTaskRemoved(Intent rootIntent) {
-
-    Toast.makeText(this, "Task removed: " + rootIntent, Toast.LENGTH_LONG).show();
-  }
 
   private static final int REPORT_MSG = 1;
 
@@ -459,59 +422,6 @@ public class RemoteService extends Service implements LocationListener {
     }
   };
 
-  /**
-   * Show a notification while this service is running.
-   */
-  private void showNotification() {
-
-    // In this sample, we'll use the same text for the ticker and the expanded notification
-    CharSequence text = getText(R.string.remote_service_label);
-
-    // define sound URI, the sound to be played when there's a notification
-    Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-
-    // Set the icon, scrolling text and timestamp
-    // Notification notification = new Notification(R.drawable.stat_sample, text,
-    // System.currentTimeMillis());
-
-    // The PendingIntent to launch our activity if the user selects this notification
-
-    Intent resumeIntent = new Intent(this, CurrentActivityActivity.class);
-    resumeIntent.putExtra(TrackingServiceConstants.TRACK_ID, this.mTrackId);
-    resumeIntent.putExtra(TrackingServiceConstants.SEGMENT_ID, this.mSegmentId);
-
-    PendingIntent contentIntent = PendingIntent.getActivity(this, 0, resumeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-    // this is it, we'll build the notification!
-    // in the addAction method, if you don't want any icon, just set the first param to 0
-    Notification mNotification =
-        new NotificationCompat.Builder(this).setContentTitle(text)
-            .setContentText(getText(R.string.remote_service_started)).setSmallIcon(R.drawable.ic_process_launcher)
-            .setContentIntent(contentIntent).setSound(soundUri)
-            .addAction(R.drawable.ic_process_launcher, "View", contentIntent)
-            // .addAction(0, "Remind", contentIntent)
-            .build();
-
-    this.mNoticationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-    // If you want to hide the notification after it was selected, do the code below
-    // myNotification.flags |= Notification.FLAG_AUTO_CANCEL;
-
-    // mNoticationManager.notify(0, mNotification);
-
-    // Notification notification = new Notification(R.drawable.ic_process_launcher, text,
-    // System.currentTimeMillis());
-    //
-    // long [] vibrate = {0,100,200,300};
-    // notification.vibrate = vibrate;
-    //
-    // // Set the info for the views that show in the notification panel.
-    // notification.setLatestEventInfo(this, getText(R.string.remote_service_label),
-    // text, contentIntent);
-    // Send the notification.
-    // We use a string id because it is a unique number. We use it later to cancel.
-    this.mNoticationManager.notify(0, mNotification);
-  }
-
   @Override
   public void onLocationChanged(Location location) {
 
@@ -546,7 +456,6 @@ public class RemoteService extends Service implements LocationListener {
         this.mPreviousLocation = filteredLocation;
       }
     }
-
   }
 
   public synchronized void startLogging(Location startLocation) {
@@ -577,17 +486,7 @@ public class RemoteService extends Service implements LocationListener {
   }
 
   private Long getUserId() {
-    Long userId = null;
-    userId = UserInfo.INSTANCE.getUserInfo().getUserId();
-    return userId;
-
-    /*
-	  SharedPreferences sharedPrefs = getSharedPreferences(Constants.PREFERENCES, MODE_PRIVATE);
-	  if (sharedPrefs != null) {
-		  userId = sharedPrefs.getLong(Constants.PREF_USERID, -1L);
-	  }
-	  return userId;
-	  */
+    return UserInfo.INSTANCE.getUserInfo().getUserId();
   }
   
   public synchronized void pauseLogging() {
@@ -913,7 +812,6 @@ public class RemoteService extends Service implements LocationListener {
         getContentResolver().insert(Uri.withAppendedPath(Tracks.CONTENT_URI, this.mTrackId + "/segments"),
             new ContentValues(0));
     this.mSegmentId = Long.valueOf(newSegment.getLastPathSegment()).longValue();
-    // crashProtectState();
   }
 
   private void updateSegment() {
@@ -946,7 +844,37 @@ public class RemoteService extends Service implements LocationListener {
       }
     }
   }
-  
+
+  private void prepareForegroundNotification() {
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      NotificationChannel serviceChannel = new NotificationChannel(
+              CHANNEL_ID,
+              "Spontaneous Running Channel",
+              NotificationManager.IMPORTANCE_DEFAULT
+      );
+      NotificationManager manager = getSystemService(NotificationManager.class);
+      manager.createNotificationChannel(serviceChannel);
+    }
+
+    Intent resumeIntent = new Intent(this, CurrentActivityActivity.class);
+    resumeIntent.putExtra(TrackingServiceConstants.TRACK_ID, this.mTrackId);
+    resumeIntent.putExtra(TrackingServiceConstants.SEGMENT_ID, this.mSegmentId);
+
+    PendingIntent pendingIntent = PendingIntent.getActivity(this,
+            1,
+            resumeIntent, 0);
+
+    Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+    Notification notification = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
+            .setContentTitle(getString(R.string.service_notification_title))
+            .setSmallIcon(R.drawable.ic_process_launcher)
+            .setContentIntent(pendingIntent).setSound(soundUri)
+            .build();
+
+    startForeground(1, notification);
+  }
 
   public TrackModel readTrackAndSegmentsById(Long trackId) {
 

@@ -5,7 +5,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import org.apache.http.Header;
+import cz.msebera.android.httpclient.Header;
 
 public class NetworkUtil {
 
